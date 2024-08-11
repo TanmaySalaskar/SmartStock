@@ -1,27 +1,47 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let stockChart; // Reference to the chart instance
+    let stockChart;
+    let intervalId; // Declare intervalId in the outer scope
 
-    // Predefined list of stocks
     const predefinedStocks = [
-        { name: 'Reliance', price: 2950 },
-        { name: 'TATA', price: 4220 },
-        { name: 'HDFC Bank', price: 1650 },
-        { name: 'Infosys', price: 1770 },
-        { name: 'ICICI Bank', price: 1170 },
-        { name: 'LIC', price: 1133 },
-        { name: 'Sun Pharma', price: 1735 },
-        { name: 'JSW', price: 900 },
-        { name: 'Adani', price: 3200 },
-        { name: 'Wipro', price: 500 }
+        { name: 'Reliance', price: 2950, high: 3100, low: 2800 },
+        { name: 'TATA', price: 4220, high: 4300, low: 4000 },
+        { name: 'HDFC Bank', price: 1650, high: 1700, low: 1600 },
+        { name: 'Infosys', price: 1770, high: 1800, low: 1600 },
+        { name: 'ICICI Bank', price: 1170, high: 1200, low: 1100 },
+        { name: 'LIC', price: 1133, high: 1150, low: 1100 },
+        { name: 'Sun Pharma', price: 1735, high: 1800, low: 1700 },
+        { name: 'JSW', price: 900, high: 950, low: 850 },
+        { name: 'Adani', price: 3200, high: 3300, low: 3100 },
+        { name: 'Wipro', price: 500, high: 520, low: 480 }
     ];
 
-    // Populate the stock list
     const stockList = document.getElementById('stock-list');
     predefinedStocks.forEach(stock => {
         const listItem = document.createElement('li');
         listItem.textContent = `${stock.name}: ₹${stock.price.toFixed(2)}`;
-        listItem.dataset.price = stock.price;  // Store the price in data attribute
+        listItem.dataset.price = stock.price;
+        listItem.dataset.high = stock.high;
+        listItem.dataset.low = stock.low;
         stockList.appendChild(listItem);
+
+        listItem.addEventListener('mouseover', function() {
+            let dropdown = document.createElement('div');
+            dropdown.className = 'dropdown';
+            dropdown.style.position = 'absolute';
+            dropdown.style.backgroundColor = 'white';
+            dropdown.style.border = '1px solid #ccc';
+            dropdown.style.padding = '5px';
+            dropdown.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
+            dropdown.innerHTML = `
+                <p>High: ₹${listItem.dataset.high}</p>
+                <p>Low: ₹${listItem.dataset.low}</p>
+            `;
+            listItem.appendChild(dropdown);
+
+            listItem.addEventListener('mouseleave', function() {
+                dropdown.remove();
+            });
+        });
     });
 
     document.getElementById('submit-button').addEventListener('click', function() {
@@ -126,25 +146,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Simulate continuous price changes
         function simulateContinuousPriceChanges() {
-            setTimeout(() => {
-                const fluctuation = (Math.random() - 0.6) * 200;  // Random fluctuation
-                stock.currentPrice += fluctuation;  // Adjust current price
+            const startTime = Date.now();
+            const simulationDuration = 8000; // 8 seconds
 
-                // Ensure the price doesn't drop below the low limit
+            intervalId = setInterval(() => {
+                const currentTime = Date.now();
+                
+                // Ensure the price does not go below the low limit
                 if (stock.currentPrice < lowLimit) {
                     stock.currentPrice = lowLimit;
                 }
 
-                const message = updateStatus(stock);
-                statusLabel.textContent = message;
+                if (currentTime - startTime >= simulationDuration) {
+                    clearInterval(intervalId);  // Stop the simulation
+                    const message = updateStatus(stock);
+                    statusLabel.textContent = message;
 
-                // Update the chart
-                stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
-                stockChart.data.datasets[0].data.push(stock.currentPrice);
-                stockChart.update();
+                    // Update the chart with the final data
+                    stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
+                    stockChart.data.datasets[0].data.push(stock.currentPrice);
+                    stockChart.update();
+                } else {
+                    const fluctuation = (Math.random() - 0.5) * 300;  // Random fluctuation
+                    stock.currentPrice += fluctuation;  // Adjust current price
 
-                if (statusLabel.textContent.includes('Holding')) {
-                    simulateContinuousPriceChanges();  // Continue simulation if holding
+                    // Ensure the price does not go below the low limit
+                    if (stock.currentPrice < lowLimit) {
+                        stock.currentPrice = lowLimit;
+                    }
+
+                    // Update the chart
+                    stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
+                    stockChart.data.datasets[0].data.push(stock.currentPrice);
+                    stockChart.update();
                 }
             }, 1000);  // Update every 1 second
         }
