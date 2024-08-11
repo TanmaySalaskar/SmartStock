@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TRADE DASHBOARD</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="dashboard">
+            <h2>Transaction History</h2>
+            <button id="clear-history-button">Clear History</button>
+
+            <table id="trade-table">
+                <thead>
+                    <tr>
+                        <th>Stock Name</th>
+                        <th>Action</th>
+                        <th>Buying Price</th>
+                        <th>Selling Price</th>
+                        <th>Profit/Loss</th>
+                        <th>Date/Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Transactions will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <div>
+                <button id="download-excel-button">Download Excel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
