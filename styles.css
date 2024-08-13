@@ -3,7 +3,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fffde7; /* Light yellow background */
+    background-color: #adf3ff; /* Light yellow background */
 }
 
 .container {
@@ -18,15 +18,15 @@ body {
 .header {
     width: 100%;
     background-color: #212121; /* Black header */
-    color: #fffde7; /* Light yellow text */
-    padding: 15px 0;
+    color: #ffea05; /* Light yellow text */
+    padding: 5px 0;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
 nav ul li {
-    margin-right: 30px;
-    border-radius: 10px; /* Rounded edges for navigation items */
+    margin-right: 10px;
+    border-radius: 20px; /* Rounded edges for navigation items */
     overflow: hidden; /* Ensure content stays within rounded edges */
 }
 
@@ -35,10 +35,10 @@ nav ul li a {
     font-weight: bold;
     font-size: 1.5em;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    background-color: white;
+    background-color: #ffea05;
     display: block; /* Ensure the link fills the list item */
-    padding: 10px 15px; /* Add some padding for better appearance */
-    border-radius: 10px; /* Rounded edges for links */
+    padding: 5px 20px; /* Add some padding for better appearance */
+    border-radius: 5px; /* Rounded edges for links */
 }
 
 nav ul li a:hover {
@@ -180,34 +180,19 @@ nav ul li a.transactions-link {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+footer{
+    text-align: center;
+    background-color: #424242;
+    color: white;
+    padding: 0px;
+    margin-bottom: 0px;
+    height: 50px;
+    font-size: 25px;
+}
+
 
 
 /* DASHBOARD STYLES */
-body {
-    font-family: 'Open Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #fffde7; /* Light yellow background */
-}
-
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
-
-.header {
-    background: #212121; /* Black header */
-    color: #fffde7; /* Light yellow text */
-    padding: 10px 0;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-}
-
-.header h1 {
-    margin: 0;
-}
 
 nav ul {
     list-style: none;
@@ -216,27 +201,6 @@ nav ul {
     display: flex;
     justify-content: flex-start;
     color: #000;
-}
-
-nav ul li {
-    margin-left: 10px;
-    border-radius: 10px; /* Rounded edges for navigation items */
-    overflow: hidden; /* Ensure content stays within rounded edges */
-}
-
-nav ul li a {
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.5em;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    background-color: white;
-    display: block; /* Ensure the link fills the list item */
-    padding: 10px 15px; /* Add some padding for better appearance */
-    border-radius: 10px; /* Rounded edges for links */
-}
-
-nav ul li a:hover {
-    text-decoration: underline;
 }
 
 
