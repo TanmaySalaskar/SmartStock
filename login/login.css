@@ -9,9 +9,15 @@ body {
     height: 100vh;
 }
 
-#welcome {
-    padding-left: 50px;
-    font-size: 100px;
+
+#img{
+    width: 5cm;
+}
+
+#stm {
+    padding-top: 3cm;
+    padding-left: 5cm;
+    font-size: 150px;
     color: #ffcc00; /* Bright yellow text */
     text-shadow: 
         -2px -2px 0 #000,  /* Top left */
