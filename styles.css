@@ -15,40 +15,59 @@ body {
     padding: 20px;
 }
 
-.header {
-    width: 100%;
-    background-color: #212121; /* Black header */
-    color: #ffea05; /* Light yellow text */
-    padding: 5px 0;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-}
-nav ul li {
-    margin-right: 10px;
-    border-radius: 20px; /* Rounded edges for navigation items */
-    overflow: hidden; /* Ensure content stays within rounded edges */
+/* Navbar Styles */
+.navbar {
+    width: 100%; /* Ensure the navbar spans the full width of the screen */
+    background: linear-gradient(90deg, #212121 0%, #424242 100%);
+    padding: 10px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: space-between; /* Ensure the logo and nav-links are spaced apart */
+    align-items: center;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
-nav ul li a {
+
+.navbar .logo a {
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffea05;
+    text-decoration: none;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+}
+
+.navbar .nav-links li a {
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.5em;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    background-color: #ffea05;
-    display: block; /* Ensure the link fills the list item */
-    padding: 5px 20px; /* Add some padding for better appearance */
-    border-radius: 5px; /* Rounded edges for links */
+    font-size: 1.3em;
+    color: #ffea05;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-nav ul li a:hover {
-    text-decoration: underline;
+.navbar .nav-links li a:hover {
+    background-color: #ffe96d;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    color: black;
 }
-/* Specific Styles for Home and Transactions Links */
-nav ul li a.home-link,
-nav ul li a.transactions-link {
-    color: #000; /* Black color for Home and Transactions links */
+
+/* .navbar .nav-links li a.home-link,
+.navbar .nav-links li a.transactions-link {
 }
+ */
 
 .content-wrapper {
     display: flex;
@@ -191,7 +210,7 @@ footer{
 
 
 /* DASHBOARD STYLES */
-
+/* 
 nav ul {
     list-style: none;
     padding: 0;
@@ -199,7 +218,7 @@ nav ul {
     display: flex;
     justify-content: flex-start;
     color: #000;
-}
+} */
 
 
 .dashboard {
