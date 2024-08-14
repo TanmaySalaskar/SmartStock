@@ -6,7 +6,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 
     // Basic validation (you can add more complex validation here)
     if (username === 'admin' && password === 'password123') {
-        window.location.href = 'index.html'; // Redirect to the main page after successful login
+        window.location.href = '/page/page.html'; // Redirect to the main page after successful login
     } else {
         const errorMessage = document.getElementById('error-message');
         errorMessage.textContent = 'Invalid username or password';
