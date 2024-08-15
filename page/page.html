@@ -6,29 +6,30 @@
     <title>Stock Trade Monitor</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.3/build/global/luxon.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script> 
 </head>
 <body>
     <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <a href="/page/page.html">STOCK TRADE MONITOR</a>
-                </div>
-                <ul class="nav-links">
-                    <li><a class="home-link" href="/page/page.html">Home</a></li>
-                    <li><a class="transactions-link" href="/transactions/transactions.html">Transactions</a></li>
-                    <li><a class="contact-link" href="/page/page.html">Contact Us</a></li>
-                    <li><a class="logout-link" href="/login/login.html">Logout</a></li>
-                </ul>
-            </nav>
+        <nav class="navbar">
+            <a href="/page/page.html"><img src="arrow.jpg" alt=""></a>
+            <div class="logo">
+                <a href="/page/page.html">STOCK TRADE MONITOR</a>
+            </div>
+            <ul class="nav-links">
+                <li><a class="transactions-link" href="/transactions/transactions.html">Transactions</a></li>
+                <li><a class="contact-link" href="#contact">Contact</a></li>
+                <li><a class="logout-link" href="/login/login.html">Logout</a></li>
+            </ul>
+        </nav>
 
         <div class="content-wrapper">
             <div class="stock-list">
                 <h2>Today's Stock Prices</h2>
                 <ul id="stock-list">
-    
+                    <!-- Stock items will be dynamically added here -->
                 </ul>
             </div>
 
@@ -53,9 +54,26 @@
             </div>
         </div>
     </div>
-    
-
     <script src="page.js"></script>
+    <div id="contact">
+        <h2>CONTACT US ON</h2>
+        <div class="social-links">
+            <a href="https://facebook.com" target="_blank" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" class="social-icon">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" class="social-icon">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </div>
+    </div>
+    <footer id="footer">
+        <p>2024 Stock Trade Monitor. All rights reserved.</p>
+    </footer>
 </body>
-<footer id="footer"><p>2024 Stock Trade Monitor. All rights reserved.</p></footer>
 </html>
