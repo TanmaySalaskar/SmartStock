@@ -3,16 +3,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let intervalId; // Declare intervalId in the outer scope
 
     const predefinedStocks = [
-        { name: 'Reliance', price: 2950, high: 3100, low: 2800 },
-        { name: 'TATA', price: 4220, high: 4300, low: 4000 },
-        { name: 'HDFC Bank', price: 1650, high: 1700, low: 1600 },
-        { name: 'Infosys', price: 1770, high: 1800, low: 1600 },
-        { name: 'ICICI Bank', price: 1170, high: 1200, low: 1100 },
-        { name: 'LIC', price: 1133, high: 1150, low: 1100 },
-        { name: 'Sun Pharma', price: 1735, high: 1800, low: 1700 },
-        { name: 'JSW', price: 900, high: 950, low: 850 },
-        { name: 'Adani', price: 3200, high: 3300, low: 3100 },
-        { name: 'Wipro', price: 500, high: 520, low: 480 }
+        { name: 'Reliance', price: 2950, open : 2800,high: 3100, low: 2795,close:2900 },
+        { name: 'TATA', price: 4220, open : 4150,high: 4380, low: 4100, close:4218 },
+        { name: 'HDFC Bank', price: 1650, open : 1,high: 1700, low: 1600, close:1 },
+        { name: 'Infosys', price: 1770, open : 1,high: 1800, low: 1600, close:1 },
+        { name: 'ICICI Bank', price: 1170, open : 1,high: 1200, low: 1100, close:1 },
+        { name: 'LIC', price: 1133, open : 1,high: 1150, low: 1100, close:1 },
+        { name: 'Sun Pharma', price: 1735, open : 1,high: 1800, low: 1700, close:1 },
+        { name: 'JSW', price: 900, open : 1,high: 950, low: 850, close:1 },
+        { name: 'Adani', price: 3200, open : 1,high: 3300, low: 3100, close:1 },
+        { name: 'Wipro', price: 500, open : 1,high: 520, low: 480, close:1 }
     ];
 
     const stockList = document.getElementById('stock-list');
@@ -20,8 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const listItem = document.createElement('li');
         listItem.textContent = `${stock.name}: ₹${stock.price.toFixed(2)}`;
         listItem.dataset.price = stock.price;
+        listItem.dataset.open = stock.open;
         listItem.dataset.high = stock.high;
         listItem.dataset.low = stock.low;
+        listItem.dataset.close = stock.close;
         stockList.appendChild(listItem);
 
         listItem.addEventListener('mouseover', function() {
@@ -33,8 +35,11 @@ document.addEventListener('DOMContentLoaded', function() {
             dropdown.style.padding = '5px';
             dropdown.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
             dropdown.innerHTML = `
+                <h3>YESTERDAY'S</h3>
+                <p>Open: ₹${listItem.dataset.open}</p>
                 <p>High: ₹${listItem.dataset.high}</p>
                 <p>Low: ₹${listItem.dataset.low}</p>
+                <p>Close: ₹${listItem.dataset.close}</p>
             `;
             listItem.appendChild(dropdown);
 
