@@ -90,7 +90,7 @@ body {
     display: flex;
     width: 1200px;
     max-width: 2000px;
-    margin: 3cm;
+    margin: 1.5cm;
     padding: 20px;
     background-color: #ffffff; /* White content background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
