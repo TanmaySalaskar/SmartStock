@@ -1,17 +1,17 @@
 /* General Styles */
 html{
     height: 100%;
-    max-width: 2000px;
+    max-width: 5000px;
 }
 body {
     height: 100%;
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #adf3ff; /* Light yellow background */
+    background-color: #adf3ff; /* Light blue background */
     display: flex;
     flex-direction: column;
-    max-width: 2000px;
+    max-width: 5000px;
 }
 
 .container {
@@ -19,7 +19,7 @@ body {
     flex-direction: column;
     flex: 1;
     align-items: center;
-    max-width: 2000px;
+    max-width: 5000px;
     margin: 0 auto;
     /* padding: 20px; */
 }
@@ -89,7 +89,7 @@ body {
 .content-wrapper {
     display: flex;
     width: 1200px;
-    max-width: 2000px;
+    max-width: 5000px;
     margin: 1.5cm;
     padding: 20px;
     background-color: #ffffff; /* White content background */
@@ -259,7 +259,7 @@ footer{
     color: white;
     /* height: 50px; */
     font-size: 18px;
-    max-width: 2000px;
+    max-width: 5000px;
     margin: 0 auto;
 
 }
