@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const predefinedStocks = [
         { name: 'Reliance', price: 2950, open: 2800, high: 3100, low: 2795, close: 2900 },
         { name: 'TATA', price: 4220, open: 4150, high: 4380, low: 4100, close: 4218 },
-        { name: 'HDFC Bank', price: 1650, open: 1, high: 1700, low: 1600, close: 1 },
-        { name: 'Infosys', price: 1770, open: 1, high: 1800, low: 1600, close: 1 },
-        { name: 'ICICI Bank', price: 1170, open: 1, high: 1200, low: 1100, close: 1 },
-        { name: 'LIC', price: 1133, open: 1, high: 1150, low: 1100, close: 1 },
-        { name: 'Sun Pharma', price: 1735, open: 1, high: 1800, low: 1700, close: 1 },
-        { name: 'JSW', price: 900, open: 1, high: 950, low: 850, close: 1 },
-        { name: 'Adani', price: 3200, open: 1, high: 3300, low: 3100, close: 1 },
-        { name: 'Wipro', price: 500, open: 1, high: 520, low: 480, close: 1 }
+        { name: 'HDFC Bank', price: 1650, open: 1500, high: 1700, low: 1600, close: 1630 },
+        { name: 'Infosys', price: 1770, open: 1650, high: 1800, low: 1600, close: 1700 },
+        { name: 'ICICI Bank', price: 1170, open: 1000, high: 1200, low: 1100, close: 1152 },
+        { name: 'LIC', price: 1133, open: 998, high: 1150, low: 1100, close: 1128 },
+        { name: 'Sun Pharma', price: 1735, open: 1688, high: 1800, low: 1700, close: 1721 },
+        { name: 'JSW', price: 900, open: 852, high: 950, low: 850, close: 888 },
+        { name: 'Adani', price: 3200, open: 3001, high: 3300, low: 3100, close: 3164 },
+        { name: 'Wipro', price: 500, open: 421, high: 520, low: 480, close: 493 }
     ];
 
     const stockList = document.getElementById('stock-list');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dropdown.className = 'dropdown';
             dropdown.style.position = 'absolute';
             dropdown.style.backgroundColor = 'white';
-            dropdown.style.border = '1px solid #ccc';
+            dropdown.style.border = '1px solid';
             dropdown.style.padding = '5px';
             dropdown.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
             dropdown.innerHTML = `
@@ -116,17 +116,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         function updateStatus(stock) {
-            let message = `Stock: `;
+            let message = `Stock: ${selectedStock.name} `;
             let action = '';
             let profitOrLoss = 0;
 
             if (stock.currentPrice <= lowLimit) {
                 profitOrLoss = stock.purchasePrice - stock.currentPrice;
-                message += `Sold at ₹${stock.currentPrice.toFixed(2)} - Loss: ₹${profitOrLoss.toFixed(2)}`;
+                message += `Selling at ₹${stock.currentPrice.toFixed(2)} - Loss: ₹${profitOrLoss.toFixed(2)}`;
                 action = 'Sold';
-            } else if (stock.currentPrice > highLimit + 1) { // Sell if price goes 1 rupee above the high limit
+            } else if (stock.currentPrice >= highLimit + 1) { // Sell if price goes 1 rupee above the high limit
                 profitOrLoss = stock.currentPrice - stock.purchasePrice;
-                message += `Sold at ₹${stock.currentPrice.toFixed(2)} - Profit: ₹${profitOrLoss.toFixed(2)}`;
+                message += `Selling at ₹${stock.currentPrice.toFixed(2)} - Profit: ₹${profitOrLoss.toFixed(2)}`;
                 action = 'Sold';
             } else {
                 message += `No Sale. Holding at ₹${stock.currentPrice.toFixed(2)}`;
@@ -141,9 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
             transactions.push({ stockName, action, buyingPrice, sellingPrice, quantity, dateTime });
             localStorage.setItem('transactions', JSON.stringify(transactions));
         }
-
-        // Function to show a non-intrusive notification with sound
-        function showNotification(message) {
+        
+        function showNotification(message, soundType) {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
             notification.className = 'notification';
@@ -157,76 +156,70 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.style.animation = 'popin 0.5s ease-out';
             notification.textContent = message;
             container.appendChild(notification);
-
-            // Play the notification sound
-            const audio = document.getElementById('notification-sound');
-            audio.play();
-
+        
+            // Play the appropriate notification sound if it exists
+            const audio = document.getElementById(`notification-sound-${soundType}`);
+            if (audio) {
+                audio.play().catch(error => {
+                    console.warn(`Error playing sound ${soundType}: ${error}`);
+                });
+            }
+        
             // Automatically remove the notification after a few seconds
             setTimeout(() => {
                 notification.remove();
             }, 5000);
         }
-
-        // Simulate continuous price changes
+        
         function simulateContinuousPriceChanges() {
             const startTime = Date.now();
             const simulationDuration = 30000; // 30 seconds
-
+        
             intervalId = setInterval(() => {
                 const currentTime = Date.now();
-
-                // Ensure the price does not go below the low limit
-                if (stock.currentPrice < lowLimit) {
-                    stock.currentPrice = lowLimit;
-                }
-
-                // Notify if price is dropping below the purchase price
-                if (stock.currentPrice < stock.purchasePrice) {
-                    showNotification("Price getting low");  // Show a non-intrusive notification
-                }
-
+        
+                // If the simulation duration is reached, stop the simulation
                 if (currentTime - startTime >= simulationDuration) {
-                    clearInterval(intervalId);  // Stop the simulation
-
-                    // Update the status label
+                    clearInterval(intervalId);
+        
                     const { message, action } = updateStatus(stock);
                     statusLabel.textContent = message;
-
-                    // Save the transaction if the action was 'Sold'
+        
                     if (action === 'Sold') {
                         saveTransaction(selectedStock.name, action, stock.purchasePrice, stock.currentPrice, 1, new Date().toLocaleString());
                     }
-
-                    // Update the chart with the final data
+        
+                    // Update the chart with final data
                     stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
                     stockChart.data.datasets[0].data.push(stock.currentPrice);
                     stockChart.update();
                 } else {
-                    const fluctuation = (Math.random() - 0.5) * 300;  // Random fluctuation
-                    stock.currentPrice += fluctuation;  // Adjust current price
-
-                    // Ensure the price does not go below the low limit
-                    if (stock.currentPrice < lowLimit) {
-                        stock.currentPrice = lowLimit;
-                    }
-
-                    // Check if the price exceeds the high limit
+                    // Random fluctuation in price
+                    const fluctuation = (Math.random() - 0.5) * 300;
+                    stock.currentPrice += fluctuation;
+        
+                    // Notify if price hits or exceeds the high limit
                     if (stock.currentPrice > highLimit) {
-                        showNotification("Price went high");  // Show a non-intrusive notification
+                        showNotification("Price went high", "high");
                     }
-
+        
+                    // Notify if price drops below the purchase price
+                    if (stock.currentPrice < stock.purchasePrice) {
+                        showNotification("Price getting low", "low");
+                    }
+        
                     // Update the status label
                     const { message } = updateStatus(stock);
                     statusLabel.textContent = message;
-
-                    // Update the chart
+        
+                    // Update the chart with current price
                     stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
                     stockChart.data.datasets[0].data.push(stock.currentPrice);
                     stockChart.update();
                 }
-            }, 3000);  // Update every 3 seconds
+            }, 3000); // Update every 3 seconds
         }
+        
 
         simulateContinuousPriceChanges();  // Start simulating continuous price changes
     });
