@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
             notification.className = 'notification';
-            notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-            notification.style.color = 'white';
+            notification.style.backgroundColor = 'white';
+            notification.style.color = 'black';
             notification.style.padding = '10px';
             notification.style.marginBottom = '5px';
             notification.style.borderRadius = '5px';
