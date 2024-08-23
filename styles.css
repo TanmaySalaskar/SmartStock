@@ -1,16 +1,16 @@
 /* General Styles */
-html{
+html, body {
     height: 100%;
-    max-width: 5000px;
-}
-body {
-    height: 100%;
-    font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
     background-color: #adf3ff; /* Light blue background */
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+}
+
+body {
     max-width: 5000px;
 }
 
@@ -19,9 +19,9 @@ body {
     flex-direction: column;
     flex: 1;
     align-items: center;
-    max-width: 5000px;
     margin: 0 auto;
-    /* padding: 20px; */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Navbar Styles */
@@ -33,26 +33,24 @@ body {
     display: flex;
     justify-content: space-between; /* Space between logo and nav-links */
     align-items: center;
+    position: fixed; /* Ensure it stays at the top */
     top: 0;
     left: 0;
-    right: 0;
     z-index: 1000; /* Make sure it stays above other content */
+    box-sizing: border-box;
 }
-
 
 .navbar img {
     width: 80px;
-    align-items: center;
     padding-left: 1cm;
- }
- 
+}
+
 .navbar .logo a {
     font-size: 2.5em;
     font-weight: bold;
     color: #ffea05;
     text-decoration: none;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-    margin-right: 8cm;
     padding-left: 0;
 }
 
@@ -60,11 +58,9 @@ body {
     list-style: none;
     display: flex;
     gap: 20px;
-    margin-right: 1cm;
 }
 
 .navbar .nav-links li a {
-    display: inline-block; /* Ensure padding and border-radius are applied correctly */
     text-decoration: none;
     font-weight: bold;
     font-size: 1.3em;
@@ -81,20 +77,15 @@ body {
     color: black;
 }
 
-/* .navbar .nav-links li a.home-link,
-.navbar .nav-links li a.transactions-link {
-}
- */
-
+/* Content Wrapper Styles */
 .content-wrapper {
     display: flex;
-    width: 1200px;
-    max-width: 5000px;
-    margin: 1.5cm;
-    padding: 20px;
+    margin: 3cm;
+    padding: 30px;
     background-color: #ffffff; /* White content background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px; /* Rounded edges for content wrapper */
+    box-sizing: border-box;
 }
 
 .stock-list {
@@ -103,6 +94,7 @@ body {
     border-right: 2px solid #212121; /* Black border */
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative; /* Needed for positioning the dropdown */
+    box-sizing: border-box;
 }
 
 .stock-list h2 {
@@ -129,7 +121,6 @@ body {
     background-color: #eaeaea; /* Light grey hover */
 }
 
-
 .stock-list ul li .dropdown {
     display: none;
     position: absolute;
@@ -155,9 +146,11 @@ body {
     font-weight: bold;
 }
 
+/* Input Section Styles */
 .input-section {
     width: 70%;
     padding: 15px;
+    box-sizing: border-box;
 }
 
 .input-group {
@@ -173,11 +166,12 @@ body {
 }
 
 .input-group input {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px;
     border: 1px solid #212121; /* Black border */
     border-radius: 4px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 #submit-button {
@@ -205,6 +199,7 @@ body {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* Graph Container Styles */
 .graph-container {
     margin-top: 20px;
     width: 100%;
@@ -214,21 +209,24 @@ body {
     border: 1px solid #212121; /* Black border */
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
 }
 
+/* Contact Section Styles */
 #contact {
     display: flex;
     flex-direction: column;
     text-align: center; /* Center align the content */
-    padding: 20px 20px; /* Add padding around the section */
-    background-color: #000000; /* Light background color for contrast */
+    padding: 20px;
+    background-color: #000000; /* Black background */
+    color: white;
     width: 100%;
+    box-sizing: border-box;
 }
 
 #contact h2 {
     margin-bottom: 20px; /* Space below the heading */
     font-size: 24px; /* Adjust font size for heading */
-    color: white;
 }
 
 .social-links {
@@ -249,25 +247,21 @@ body {
     transform: scale(1.5); /* Slightly enlarge on hover */
 }
 
-
-footer{
+/* Footer Styles */
+footer {
     display: flex;
     flex-direction: column;
     width: 100%;
     text-align: center;
     background-color: #424242;
     color: white;
-    /* height: 50px; */
     font-size: 18px;
-    max-width: 5000px;
-    margin: 0 auto;
-
+    box-sizing: border-box;
+    padding: 10px;
+    position: relative; /* Ensure footer is positioned properly */
 }
 
-
-
-/* DASHBOARD STYLES */
-
+/* Dashboard Styles */
 .dashboard {
     width: 100%;
     background: #ffffff; /* White dashboard background */
@@ -275,6 +269,7 @@ footer{
     margin: 3cm;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
 }
 
 .dashboard h2 {
@@ -309,7 +304,8 @@ footer{
     background-color: #f0f0f0; /* Light grey hover */
 }
 
-#clear-history-button {
+#clear-history-button,
+#download-excel-button {
     background-color: #212121; /* Black button */
     color: #fffde7; /* Light yellow text */
     border: none;
@@ -321,40 +317,116 @@ footer{
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-#clear-history-button:hover {
+#clear-history-button:hover,
+#download-excel-button:hover {
     background-color: #424242; /* Darker black hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-#total-buying-price,
-#total-selling-price,
-#total-quantity {
-    margin-top: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #212121; /* Black text */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-#download-excel-button {
-    background-color: #212121; /* Black button */
-    border: none;
-    color: #fffde7; /* Light yellow text */
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px 0;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-#download-excel-button:hover {
-    background-color: #424242; /* Darker black hover */
-}
-
 #download-excel-button:focus {
     outline: none;
+}
+
+
+
+/* RESPONSIVE */
+/* General Styles */
+@media (max-width: 1200px) {
+    .container {
+        margin: 0 10px; /* Add some margin on small screens */
+    }
+
+    .navbar {
+        padding: 5px 10px; /* Reduce padding on small screens */
+    }
+
+    .navbar .logo a {
+        font-size: 2em; /* Reduce font size for small screens */
+        margin-right: 3cm; /* Adjust margin */
+    }
+
+    .navbar .nav-links {
+        gap: 10px; /* Reduce gap between links */
+    }
+
+    .stock-list, .input-section {
+        width: 100%; /* Full width for small screens */
+        border-right: none; /* Remove border for small screens */
+        border-bottom: 1px solid #212121; /* Add bottom border for separation */
+    }
+
+    .input-group input {
+        width: calc(100% - 20px); /* Ensure inputs fit properly */
+    }
+
+    .content-wrapper {
+        width: 100%; /* Full width for small screens */
+        margin: 10px 0; /* Adjust margin */
+    }
+
+    #contact {
+        padding: 10px; /* Reduce padding */
+    }
+
+    .social-links {
+        gap: 20px; /* Reduce space between icons */
+    }
+
+    .dashboard {
+        margin: 1cm; /* Reduce margin */
+    }
+
+    #trade-table th, #trade-table td {
+        padding: 6px; /* Reduce padding for small screens */
+    }
+
+    #clear-history-button,
+    #download-excel-button {
+        padding: 8px 16px; /* Adjust button size */
+        font-size: 14px; /* Reduce font size */
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo a {
+        font-size: 1.5em; /* Further reduce font size */
+    }
+
+    .navbar .nav-links {
+        flex-direction: column; /* Stack links vertically */
+        gap: 10px;
+    }
+
+    .navbar img {
+        width: 60px; /* Reduce logo size */
+        padding-left: 0.5cm; /* Adjust padding */
+    }
+
+    .stock-list, .input-section {
+        width: 100%; /* Full width */
+        border-right: none; /* Remove border */
+        border-bottom: 1px solid #212121; /* Add bottom border */
+    }
+
+    .content-wrapper {
+        margin: 5px 0; /* Adjust margin */
+    }
+
+    #contact h2 {
+        font-size: 20px; /* Adjust font size */
+    }
+
+    .social-links {
+        gap: 10px; /* Further reduce space between icons */
+    }
+
+    #trade-table th, #trade-table td {
+        padding: 4px; /* Further reduce padding */
+    }
+
+    #clear-history-button,
+    #download-excel-button {
+        padding: 6px 12px; /* Adjust button size */
+        font-size: 12px; /* Further reduce font size */
+    }
 }
