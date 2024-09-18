@@ -81,7 +81,8 @@ body {
 .content-wrapper {
     display: flex;
     margin: 3cm;
-    padding: 30px;
+    padding: 40px;
+    width: 80%;
     background-color: #ffffff; /* White content background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px; /* Rounded edges for content wrapper */
@@ -191,6 +192,30 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Sell Button Styles */
+#sell-button {
+    background-color: #ff3d3d; /* Red color for sell */
+    color: #fff; /* White text */
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#sell-button:hover {
+    background-color: #ff1a1a; /* Darker red on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+#sell-button:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+
 .status-label {
     margin-top: 20px;
     font-size: 1.2em;
@@ -263,7 +288,7 @@ footer {
 
 /* Dashboard Styles */
 .dashboard {
-    width: 100%;
+    width: 80%;
     background: #ffffff; /* White dashboard background */
     padding: 20px;
     margin: 3cm;
