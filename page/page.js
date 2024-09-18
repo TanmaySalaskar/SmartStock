@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     let stockChart;
-    let intervalId; // Declare intervalId in the outer scope
+    let intervalId;
 
     const predefinedStocks = [
         { name: 'Reliance', price: 2950, open: 2800, high: 3100, low: 2795, close: 2900 },
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const statusLabel = document.getElementById('status-label');
 
-        // Create a new chart instance
         const ctx = document.getElementById('stock-graph').getContext('2d');
         if (stockChart) {
             stockChart.destroy();
@@ -124,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 profitOrLoss = stock.purchasePrice - stock.currentPrice;
                 message += `Selling at ₹${stock.currentPrice.toFixed(2)} - Loss: ₹${profitOrLoss.toFixed(2)}`;
                 action = 'Sold';
-            } else if (stock.currentPrice >= highLimit + 1) { // Sell if price goes 1 rupee above the high limit
+            } else if (stock.currentPrice >= highLimit + 1) {
                 profitOrLoss = stock.currentPrice - stock.purchasePrice;
                 message += `Selling at ₹${stock.currentPrice.toFixed(2)} - Profit: ₹${profitOrLoss.toFixed(2)}`;
                 action = 'Sold';
@@ -157,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.textContent = message;
             container.appendChild(notification);
         
-            // Play the appropriate notification sound if it exists
             const audio = document.getElementById(`notification-sound-${soundType}`);
             if (audio) {
                 audio.play().catch(error => {
@@ -165,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         
-            // Automatically remove the notification after a few seconds
             setTimeout(() => {
                 notification.remove();
             }, 5000);
@@ -178,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
             intervalId = setInterval(() => {
                 const currentTime = Date.now();
         
-                // If the simulation duration is reached, stop the simulation
                 if (currentTime - startTime >= simulationDuration) {
                     clearInterval(intervalId);
         
@@ -189,38 +185,58 @@ document.addEventListener('DOMContentLoaded', function() {
                         saveTransaction(selectedStock.name, action, stock.purchasePrice, stock.currentPrice, 1, new Date().toLocaleString());
                     }
         
-                    // Update the chart with final data
                     stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
                     stockChart.data.datasets[0].data.push(stock.currentPrice);
                     stockChart.update();
                 } else {
-                    // Random fluctuation in price
                     const fluctuation = (Math.random() - 0.5) * 300;
                     stock.currentPrice += fluctuation;
         
-                    // Notify if price hits or exceeds the high limit
                     if (stock.currentPrice > highLimit) {
                         showNotification("Price went high", "high");
                     }
         
-                    // Notify if price drops below the purchase price
                     if (stock.currentPrice < stock.purchasePrice) {
                         showNotification("Price getting low", "low");
                     }
         
-                    // Update the status label
                     const { message } = updateStatus(stock);
                     statusLabel.textContent = message;
         
-                    // Update the chart with current price
                     stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
                     stockChart.data.datasets[0].data.push(stock.currentPrice);
                     stockChart.update();
                 }
             }, 3000); // Update every 3 seconds
         }
-        
 
-        simulateContinuousPriceChanges();  // Start simulating continuous price changes
+        simulateContinuousPriceChanges();
+
+        // Manual sell functionality
+        document.getElementById('sell-button').addEventListener('click', function() {
+            const stockName = document.getElementById('stock-name').value;
+            const selectedStock = predefinedStocks.find(stock => stock.name.toLowerCase() === stockName.toLowerCase());
+
+            if (!selectedStock) {
+                alert('Please select a valid stock from the list.');
+                return;
+            }
+
+            const currentPrice = stock.currentPrice; // Get the current price from the stock object
+            const statusLabel = document.getElementById('status-label');
+            const { message, action } = updateStatus(stock);
+
+            statusLabel.textContent = message; // Update the status label
+
+            // Save transaction on manual sell
+            saveTransaction(selectedStock.name, action, stock.purchasePrice, currentPrice, 1, new Date().toLocaleString());
+            
+            // Clear the chart and reset the stock variables
+            stockChart.data.labels = [];
+            stockChart.data.datasets[0].data = [];
+            stockChart.update();
+            clearInterval(intervalId); // Stop the simulation
+            alert("Stock sold successfully!");
+        });
     });
 });
