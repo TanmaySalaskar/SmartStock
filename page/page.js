@@ -27,25 +27,30 @@ document.addEventListener('DOMContentLoaded', function() {
         stockList.appendChild(listItem);
 
         listItem.addEventListener('mouseover', function() {
-            let dropdown = document.createElement('div');
-            dropdown.className = 'dropdown';
-            dropdown.style.position = 'absolute';
-            dropdown.style.backgroundColor = 'white';
-            dropdown.style.border = '1px solid';
-            dropdown.style.padding = '5px';
-            dropdown.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
-            dropdown.innerHTML = `
-                <h3>YESTERDAY'S</h3>
-                <p>Open: ₹${listItem.dataset.open}</p>
-                <p>High: ₹${listItem.dataset.high}</p>
-                <p>Low: ₹${listItem.dataset.low}</p>
-                <p>Close: ₹${listItem.dataset.close}</p>
-            `;
-            listItem.appendChild(dropdown);
+            if (!listItem.querySelector('.dropdown')) {
+                let dropdown = document.createElement('div');
+                dropdown.className = 'dropdown';
+                dropdown.style.position = 'absolute';
+                dropdown.style.backgroundColor = 'white';
+                dropdown.style.border = '1px solid';
+                dropdown.style.padding = '5px';
+                dropdown.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
+                dropdown.innerHTML = `
+                    <h3>YESTERDAY'S</h3>
+                    <p>Open: ₹${listItem.dataset.open}</p>
+                    <p>High: ₹${listItem.dataset.high}</p>
+                    <p>Low: ₹${listItem.dataset.low}</p>
+                    <p>Close: ₹${listItem.dataset.close}</p>
+                `;
+                listItem.appendChild(dropdown);
+            }
+        });
 
-            listItem.addEventListener('mouseleave', function() {
+        listItem.addEventListener('mouseleave', function() {
+            const dropdown = listItem.querySelector('.dropdown');
+            if (dropdown) {
                 dropdown.remove();
-            });
+            }
         });
     });
 
@@ -69,13 +74,13 @@ document.addEventListener('DOMContentLoaded', function() {
         let stock = {
             id: 1,
             purchasePrice: selectedStock.price,
-            currentPrice: selectedStock.price,
+            currentPrice: selectedStock.price, // Start at the current buy price
             boughtTime: Date.now()
         };
 
         const statusLabel = document.getElementById('status-label');
-
         const ctx = document.getElementById('stock-graph').getContext('2d');
+
         if (stockChart) {
             stockChart.destroy();
         }
@@ -115,17 +120,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         function updateStatus(stock) {
-            let message = `Stock: ${selectedStock.name} `;
+            let message = `${selectedStock.name} `;
             let action = '';
             let profitOrLoss = 0;
 
             if (stock.currentPrice <= lowLimit) {
                 profitOrLoss = stock.purchasePrice - stock.currentPrice;
-                message += `Selling at ₹${stock.currentPrice.toFixed(2)} - Loss: ₹${profitOrLoss.toFixed(2)}`;
+                message += `Selling at ₹${stock.currentPrice.toFixed(2)}. Loss: ₹${profitOrLoss.toFixed(2)}`;
                 action = 'Sold';
             } else if (stock.currentPrice >= highLimit + 1) {
                 profitOrLoss = stock.currentPrice - stock.purchasePrice;
-                message += `Selling at ₹${stock.currentPrice.toFixed(2)} - Profit: ₹${profitOrLoss.toFixed(2)}`;
+                message += `Selling at ₹${stock.currentPrice.toFixed(2)}. Profit: ₹${profitOrLoss.toFixed(2)}`;
                 action = 'Sold';
             } else {
                 message += `No Sale. Holding at ₹${stock.currentPrice.toFixed(2)}`;
@@ -140,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             transactions.push({ stockName, action, buyingPrice, sellingPrice, quantity, dateTime });
             localStorage.setItem('transactions', JSON.stringify(transactions));
         }
-        
+
         function showNotification(message, soundType) {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
@@ -155,75 +160,74 @@ document.addEventListener('DOMContentLoaded', function() {
             notification.style.animation = 'popin 0.5s ease-out';
             notification.textContent = message;
             container.appendChild(notification);
-        
+
             const audio = document.getElementById(`notification-sound-${soundType}`);
             if (audio) {
                 audio.play().catch(error => {
                     console.warn(`Error playing sound ${soundType}: ${error}`);
                 });
             }
-        
+
             setTimeout(() => {
                 notification.remove();
             }, 5000);
         }
-        
+
         function simulateContinuousPriceChanges() {
             const startTime = Date.now();
-            const simulationDuration = 30000; // 30 seconds
-        
+            const simulationDuration = 50000; // 50 seconds
+
+            // Initialize currentPrice to purchasePrice for fluctuations
+            stock.currentPrice = stock.purchasePrice;
+
             intervalId = setInterval(() => {
                 const currentTime = Date.now();
-        
+
                 if (currentTime - startTime >= simulationDuration) {
                     clearInterval(intervalId);
-        
                     const { message, action } = updateStatus(stock);
                     statusLabel.textContent = message;
-        
+
                     if (action === 'Sold') {
                         saveTransaction(selectedStock.name, action, stock.purchasePrice, stock.currentPrice, 1, new Date().toLocaleString());
                     }
-        
+
                     stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
                     stockChart.data.datasets[0].data.push(stock.currentPrice);
                     stockChart.update();
                 } else {
+                    // Calculate fluctuation relative to the current price
                     const fluctuation = (Math.random() - 0.5) * 300;
-                    stock.currentPrice += fluctuation;
-        
+                    stock.currentPrice += fluctuation; // Adjust currentPrice directly
+
+                    // Ensure price doesn't go below 0
+                    if (stock.currentPrice < 0) {
+                        stock.currentPrice = 0;
+                    }
+
                     if (stock.currentPrice > highLimit) {
                         showNotification("Price went high", "high");
                     }
-        
+
                     if (stock.currentPrice < stock.purchasePrice) {
                         showNotification("Price getting low", "low");
                     }
-        
+
                     const { message } = updateStatus(stock);
                     statusLabel.textContent = message;
-        
+
                     stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
                     stockChart.data.datasets[0].data.push(stock.currentPrice);
                     stockChart.update();
                 }
-            }, 3000); // Update every 3 seconds
+            }, 5000); // Update every 5 seconds
         }
 
         simulateContinuousPriceChanges();
 
         // Manual sell functionality
         document.getElementById('sell-button').addEventListener('click', function() {
-            const stockName = document.getElementById('stock-name').value;
-            const selectedStock = predefinedStocks.find(stock => stock.name.toLowerCase() === stockName.toLowerCase());
-
-            if (!selectedStock) {
-                alert('Please select a valid stock from the list.');
-                return;
-            }
-
             const currentPrice = stock.currentPrice; // Get the current price from the stock object
-            const statusLabel = document.getElementById('status-label');
             const { message, action } = updateStatus(stock);
 
             statusLabel.textContent = message; // Update the status label
