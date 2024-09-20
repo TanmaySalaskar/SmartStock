@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Stock Trade Monitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="signin.css">
+</head>
+<body background="/bg.png">
+<div class="sign-in-container" >
+    <H1>STM</H1>
+    <div class="sign-in-box">
+        <h2>SIGN IN</h2>
+        <form id="sign-in-form">
+            <div class="input-group">
+                <label for="new-username">Username</label>
+                <input type="text" id="new-username" placeholder="Enter username" required>
+            </div>
+            <div class="input-group">
+                <label for="new-password">Password</label>
+                <input type="password" id="new-password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" id="sign-in-button">Sign In</button>
+            <div id="sign-in-message"></div>
+        </form>
+        <div class="login-option">
+            <p>Account Created? <a href="/login/login.html">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="signin.js"></script>
+</body>
+</html>
