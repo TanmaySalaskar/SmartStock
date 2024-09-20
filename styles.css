@@ -2,17 +2,14 @@
 html, body {
     height: 100%;
     margin: 0;
-    padding: 0;
     font-family: 'Open Sans', sans-serif;
-    background-color: #adf3ff; /* Light blue background */
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    background: linear-gradient(120deg, #00c8ff, #84ffa1); /* Gradient from light blue to pink */
 }
 
-body {
-    max-width: 5000px;
-}
+
 
 .container {
     display: flex;
@@ -27,43 +24,38 @@ body {
 /* Navbar Styles */
 .navbar {
     width: 100%; /* Ensure the navbar spans the full width of the screen */
-    background: linear-gradient(90deg, #212121 0%, #000000 100%);
-    padding: 10px 20px;
+    background-color: black;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     display: flex;
-    justify-content: space-between; /* Space between logo and nav-links */
     align-items: center;
-    position: fixed; /* Ensure it stays at the top */
-    top: 0;
-    left: 0;
     z-index: 1000; /* Make sure it stays above other content */
     box-sizing: border-box;
 }
 
 .navbar img {
-    width: 80px;
-    padding-left: 1cm;
+    width: 100px;
+    margin-left: 2px;
 }
 
-.navbar .logo a {
-    font-size: 2.5em;
-    font-weight: bold;
+.navbar .logo-name a{
+    font-size: 1.6em;
     color: #ffea05;
     text-decoration: none;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-    padding-left: 0;
+    margin-left: 0.5cm;
+
 }
 
-.navbar .nav-links {
+.nav-links {
+    margin-left: auto; /* Push the nav links to the right */
     list-style: none;
     display: flex;
     gap: 20px;
 }
 
-.navbar .nav-links li a {
+.nav-links li a {
     text-decoration: none;
-    font-weight: bold;
-    font-size: 1.3em;
+    font-size: 1.1em;
     color: #ffea05;
     padding: 10px 20px;
     border-radius: 25px;
@@ -80,9 +72,9 @@ body {
 /* Content Wrapper Styles */
 .content-wrapper {
     display: flex;
-    margin: 3cm;
+    margin: 1cm;
     padding: 40px;
-    width: 80%;
+    width: 95%;
     background-color: #ffffff; /* White content background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px; /* Rounded edges for content wrapper */
@@ -144,12 +136,11 @@ body {
     margin: 0;
     padding: 5px 0;
     color: #212121; /* Dark text color */
-    font-weight: bold;
 }
 
 /* Input Section Styles */
 .input-section {
-    width: 70%;
+    width: 30%;
     padding: 15px;
     box-sizing: border-box;
 }
@@ -161,7 +152,6 @@ body {
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
     color: #212121; /* Black text */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
@@ -219,7 +209,6 @@ body {
 .status-label {
     margin-top: 20px;
     font-size: 1.2em;
-    font-weight: bold;
     color: #212121; /* Black text */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
@@ -251,7 +240,7 @@ body {
 
 #contact h2 {
     margin-bottom: 20px; /* Space below the heading */
-    font-size: 24px; /* Adjust font size for heading */
+    font-size: 18px; /* Adjust font size for heading */
 }
 
 .social-links {
@@ -263,7 +252,7 @@ body {
 .social-icon {
     text-decoration: none; /* Remove underline */
     color: #ffffff; /* Icon color */
-    font-size: 30px; /* Icon size */
+    font-size: 20px; /* Icon size */
     transition: color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
 }
 
@@ -280,7 +269,7 @@ footer {
     text-align: center;
     background-color: #424242;
     color: white;
-    font-size: 18px;
+    font-size: 15px;
     box-sizing: border-box;
     padding: 10px;
     position: relative; /* Ensure footer is positioned properly */
@@ -288,10 +277,10 @@ footer {
 
 /* Dashboard Styles */
 .dashboard {
-    width: 80%;
+    width: 95%;
     background: #ffffff; /* White dashboard background */
     padding: 20px;
-    margin: 3cm;
+    margin: 1cm;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
@@ -329,9 +318,21 @@ footer {
     background-color: #f0f0f0; /* Light grey hover */
 }
 
-#clear-history-button,
+#clear-history-button{
+    background-color: red; /* Black button */
+    color: #fffde7; /* Light yellow text */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, box-shadow 0.3s;
+
+}
+
 #download-excel-button {
-    background-color: #212121; /* Black button */
+    background-color: green; /* Black button */
     color: #fffde7; /* Light yellow text */
     border: none;
     padding: 10px 20px;
@@ -342,9 +343,13 @@ footer {
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-#clear-history-button:hover,
+#clear-history-button:hover{
+    background-color: #ff5b5b; /* Darker black hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+
+}
 #download-excel-button:hover {
-    background-color: #424242; /* Darker black hover */
+    background-color: #31ff8a; /* Darker black hover */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -425,6 +430,7 @@ footer {
     .navbar img {
         width: 60px; /* Reduce logo size */
         padding-left: 0.5cm; /* Adjust padding */
+        margin: 0;
     }
 
     .stock-list, .input-section {
