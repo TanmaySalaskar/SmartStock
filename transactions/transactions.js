@@ -1,69 +1,69 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const tradeTableBody = document.getElementById('trade-table').querySelector('tbody');
+    const transactionsTableBody = document.getElementById('transactions-table').querySelector('tbody');
+    const clearHistoryButton = document.getElementById('clear-history');
+    const downloadExcelButton = document.getElementById('download-excel');
+    
+    // Load transactions from localStorage
+    const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    loadTransactions(transactions);
 
     // Function to load transactions into the table
-    function loadTransactions() {
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        tradeTableBody.innerHTML = ''; // Clear existing table rows
-
-        // Sort transactions to have the latest on top
-        transactions.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
-
+    function loadTransactions(transactions) {
         transactions.forEach(transaction => {
             const row = document.createElement('tr');
-
-            // Check if the stock has been sold
-            const profitOrLoss = transaction.sellingPrice ? 
-                (transaction.sellingPrice - transaction.buyingPrice).toFixed(2) : 
-                'N/A';
-
-            // Calculate time since purchase
-            const timeSincePurchase = (new Date() - new Date(transaction.dateTime)) / 1000;
-            const profitOrLossDisplay = profitOrLoss !== 'N/A' ? 
-                `₹${profitOrLoss}` : 
-                (timeSincePurchase > 8 ? 'Held' : 'N/A');
-
             row.innerHTML = `
+                <td>${transaction.type}</td>
                 <td>${transaction.stockName}</td>
-                <td>${transaction.action}</td>
-                <td>₹${transaction.buyingPrice ? transaction.buyingPrice.toFixed(2) : 'N/A'}</td>
-                <td>₹${transaction.sellingPrice ? transaction.sellingPrice.toFixed(2) : 'N/A'}</td>
-                <td>${profitOrLossDisplay}</td>
-                <td>${transaction.dateTime}</td>
+                <td>₹${transaction.price.toFixed(2)}</td>
+                <td>${transaction.quantity}</td>
+                <td>₹${transaction.profitLoss ? transaction.profitLoss.toFixed(2) : '0.00'}</td>
+                <td>${new Date(transaction.date).toLocaleString()}</td>
             `;
-            tradeTableBody.appendChild(row);
+            transactionsTableBody.appendChild(row);
         });
     }
 
-    // Event listener for clearing transaction history
-    document.getElementById('clear-history-button').addEventListener('click', function() {
-        localStorage.removeItem('transactions');
-        loadTransactions(); // Refresh the table
+    // Clear history button functionality
+    clearHistoryButton.addEventListener('click', function() {
+        if (confirm("Are you sure you want to clear the transaction history?")) {
+            localStorage.removeItem('transactions'); // Clear transactions from localStorage
+            transactionsTableBody.innerHTML = ''; // Clear the table body
+            toastr.options = {
+                closeButton: true,
+                newestOnTop: true,
+                progressBar: true,
+                positionClass: "toast-top-center",
+                preventDuplicates: true,
+                timeOut: 6000,
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: true,
+                };
+            toastr.info("Transaction history cleared.");
+        }
     });
 
-    // Event listener for downloading transaction history as Excel
-    document.getElementById('download-excel-button').addEventListener('click', function() {
-        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-
-        // Create a workbook and a worksheet
-        const wb = XLSX.utils.book_new();
-        const wsData = transactions.map(transaction => ({
-            'Stock Name': transaction.stockName,
-            'Action': transaction.action,
-            'Buying Price': transaction.buyingPrice ? `₹${transaction.buyingPrice.toFixed(2)}` : 'N/A',
-            'Selling Price': transaction.sellingPrice ? `₹${transaction.sellingPrice.toFixed(2)}` : 'N/A',
-            'Profit/Loss': transaction.sellingPrice ? `₹${(transaction.sellingPrice - transaction.buyingPrice).toFixed(2)}` : 
-                         ((new Date() - new Date(transaction.dateTime)) / 1000 > 8 ? 'Held' : 'N/A'),
-            'Date/Time': transaction.dateTime
-        }));
-
-        const ws = XLSX.utils.json_to_sheet(wsData);
-        XLSX.utils.book_append_sheet(wb, ws, 'Transactions');
-
-        // Generate a downloadable file
-        XLSX.writeFile(wb, 'Transaction_History.xlsx');
+    // Download Excel button functionality
+    downloadExcelButton.addEventListener('click', function() {
+        const csvContent = generateCSV(transactions);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'transactions.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
 
-    // Initial load of transactions
-    loadTransactions();
+    // Function to generate CSV content
+    function generateCSV(transactions) {
+        const header = "Type,Stock Name,Price (₹),Quantity,Profit (₹),Date\n";
+        const rows = transactions.map(transaction => {
+            return `${transaction.type},${transaction.stockName},${transaction.price},${transaction.quantity},${transaction.profitLoss ? transaction.profitLoss : 0},${new Date(transaction.date).toLocaleString()}`;
+        }).join("\n");
+        return header + rows;
+    }
 });

@@ -1,50 +1,146 @@
+<!-- transactions.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- TOASTR NOTIFICATION -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <style>
+       /* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text color for better contrast */
+    margin: 0;
+    padding: 20px;
+}
+
+/* Heading styles */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: #ffffff; /* Bright blue color */
+}
+
+/* Button styles */
+button {
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+/* Specific button styles */
+#clear-history {
+    background-color: #FF4D4D; /* Red for clear history */
+    color: white;
+}
+#download-excel {
+    background-color: #4CAF50; /* Green for download */
+    color: white;
+}
+
+/* Button hover effects */
+#download-excel:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+#clear-history:hover {
+    background-color: #ff3333; /* Darker red on hover */
+}
+
+/* Button disabled style */
+button:disabled {
+    background-color: #555; /* Gray for disabled */
+    cursor: not-allowed;
+}
+
+/* Table styles */
+#transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: #1E1E1E; /* Darker table background */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Prevents overflow from rounded corners */
+}
+
+/* Table header styles */
+#transactions-table thead {
+    background-color: #007BFF; /* Bright blue for header */
+    color: #ffffff;
+}
+
+/* Table cell styles */
+#transactions-table th, #transactions-table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #444; /* Dark border for table cells */
+}
+
+/* Table row styles */
+#transactions-table tr:nth-child(even) {
+    background-color: #2A2A2A; /* Darker background for even rows */
+}
+
+#transactions-table tr:hover {
+    background-color: #3A3A3A; /* Highlight row on hover */
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    #transactions-table th, #transactions-table td {
+        padding: 10px;
+        font-size: 14px; /* Smaller font for smaller screens */
+    }
+
+    h1 {
+        font-size: 1.8em; /* Adjust heading size */
+    }
+}
+
+    </style>
 </head>
 <body>
-    <div class="container">
-            <nav class="navbar">
-                <a href="/page/page.html"><img src="/arrow.png" alt=""></a>
-                <div class="logo-name">
-                    <a href="/transactions/transactions.html">TRANSACTIONS</a>
-                </div>
-                <ul class="nav-links">
-                    <li><a class="home-link" href="/page/page.html">HOME</a></li>
-                </ul>
-            </nav>
-
-        <div class="dashboard">
-            <h2>Transaction History</h2>
-            <button id="clear-history-button">Clear History</button>
-            <button id="download-excel-button">Download Excel</button>
-            <table id="trade-table">
-                <thead>
-                    <tr>
-                        <th>Stock Name</th>
-                        <th>Action</th>
-                        <th>Buying Price</th>
-                        <th>Selling Price</th>
-                        <th>Profit/Loss</th>
-                        <th>Date/Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Transactions will be dynamically inserted here -->
-                </tbody>
-            </table>
+    <nav class="navbar">
+        <a href="/page/page.html"><img src="/arrow.png" alt=""></a> 
+        <div class="logo-name">
+            <a href="/page/page.html">SMART STOCK</a>
         </div>
+    </nav>
+    <h1>Transaction History</h1>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button id="clear-history" style="margin-right: 10px;">Clear History</button>
+        <button id="download-excel">Download Excel</button>
     </div>
+    
+    <table id="transactions-table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Stock Name</th>
+                <th>Price (₹)</th>
+                <th>Quantity</th>
+                <th>Profit(₹)</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Transaction rows will be dynamically inserted here -->
+        </tbody>
+    </table>
 
     <script src="transactions.js"></script>
 </body>
 </html>
-<footer id="footer"><p>2024 Stock Trade Monitor. All rights reserved.</p></footer>
