@@ -1,112 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Specify the character set for the document -->
     <meta charset="UTF-8">
+    <!-- Make the website responsive on different devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trade Monitor</title>
+    <!-- Title of the webpage displayed on the tab -->
+    <title>Smart Stock</title>
+    <!-- Link to Google Fonts for custom font styling -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Link to external CSS file for styling -->
     <link rel="stylesheet" href="/styles.css">
+    <!-- Link to Font Awesome for using icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Include Chart.js for rendering charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <!-- Include Luxon for date and time manipulation -->
     <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.3/build/global/luxon.min.js"></script>
+    <!-- Include Chart.js adapter for Luxon -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script> 
+
+    <!-- TOASTR NOTIFICATION -->
+    <!-- Include jQuery library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Include Toastr for notifications -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Link to Toastr's CSS for styling notifications -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
-    <audio id="notification-sound-low" src="low-sound.mp3"></audio>
-    <audio id="notification-sound-high" src="high-sound.mp3"></audio>
+    <!-- Audio elements for notification sounds -->
+    <audio id="high-limit-sound" src="high-sound.mp3" preload="auto"></audio>
+    <audio id="low-limit-sound" src="low-sound.mp3" preload="auto"></audio>
 
     <div class="container">
+        <!-- Navigation bar -->
         <nav class="navbar">
+            <!-- Logo link that navigates to the main page -->
             <a href="/page/page.html"><img src="/arrow.png" alt=""></a> 
             <div class="logo-name">
-                <a href="/page/page.html" >STOCK TRADE MONITOR</a>
+                <!-- Site title link -->
+                <a href="/page/page.html">SMART STOCK</a>
             </div>
-            
-            
+            <!-- Navigation links -->
             <ul class="nav-links">
-                <li><a class="portfolio-link" href="/portfolio/portfolio.html">PORTFOLIO</a></li>
-                <li><a class="transactions-link" href="/transactions/transactions.html">TRANSACTIONS</a></li>
-                <li><a class="contact-link" href="#contact">CONTACT US</a></li>
-                <li><a class="logout-link" href="#" id="logout-button">LOGOUT</a></li>
+                <li><a class="portfolio-link" href="/portfolio/portfolio.html">Portfolio</a></li>
+                <li><a class="transactions-link" href="/transactions/transactions.html">Transactions</a></li>
+                <li><a class="contact-link" href="#contact">Contact Us</a></li>
+                <li><a class="logout-link" href="#" id="logout-button">Logout</a></li>
                 <li><a href="https://www.nseindia.com/">NSE</a></li>
             </ul>
         </nav>
 
         <div class="content-wrapper">
+            <!-- Section displaying today's stock prices -->
             <div class="stock-list">
                 <h2>TODAY'S STOCK PRICES</h2>
                 <ul id="stock-list">
                     <!-- Stock items will be dynamically added here -->
                 </ul>
             </div>
+            <div class="dropdown" id="stock-dropdown"></div>
 
+            <!-- Input section for buying stocks -->
             <div class="input-section">
                 <div class="input-group">
                     <label for="stock-name">Name</label>
-                    <input type="text" id="stock-name" placeholder="Enter Stock Name">
+                    <input type="text" id="stock-name" placeholder="Enter Stock Name"> <!-- Input for stock name -->
                 </div>
                 <div class="input-group">
                     <label for="low-limit">Loss Limit</label>
-                    <input type="number" id="low-limit" placeholder="Enter Low Limit">
+                    <input type="number" id="low-limit" placeholder="Enter Low Limit"> <!-- Input for loss limit -->
                 </div>
                 <div class="input-group">
                     <label for="high-limit">Profit Limit</label>
-                    <input type="number" id="high-limit" placeholder="Enter High Limit">
+                    <input type="number" id="high-limit" placeholder="Enter High Limit"> <!-- Input for profit limit -->
                 </div>
                 <div class="input-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" id="quantity" placeholder="Number of Units">
+                    <label for="volume">Volume</label>
+                    <input type="number" id="volume" placeholder="Number of Units" min="1" value="1"> <!-- Input for volume -->
                 </div>
-                <button id="submit-button">Buy Stock</button>
-                <div id="status-label" class="status-label">Stock Status: Waiting...</div>
-                <button id="sell-button">Sell  Stock</button>
+                <button id="submit-button">Buy Stock</button> <!-- Button to buy stock -->
+                <div class="simulation-status">
+                    <h2>Simulation Status</h2>
+                    <div id="simulation-status-message">Current Status: Running...</div> <!-- Status message -->
+                </div>                
+            </div>
+
+            <!-- Modal for payment confirmation -->
+            <div id="payment-confirmation-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; border:1px solid black; padding:20px; z-index:1000;">
+                <h2>Payment Confirmation</h2>
+                <p id="confirmation-message"></p>
+                <p>Enter UPI ID or Card Details: </p>
+                <input type="text"> <!-- Input for payment details -->
+                <hr>
+                <button id="confirm-payment-button">Confirm Payment</button> <!-- Button to confirm payment -->
+                <button id="cancel-payment-button">Cancel</button> <!-- Button to cancel payment -->
+            </div>
+            
+            <!-- Section displaying bought stocks -->
+            <div class="bought-stocks-list">
+                <h2>Your Bought Stocks</h2>
+                <ul id="bought-stocks-list">
+                    <!-- List of bought stocks will be dynamically added here -->
+                </ul>
+            </div>
+
+            <!-- Modal for bank account confirmation -->
+            <div id="bank-confirmation-modal" style="display:none;">
+                <div class="modal-content">
+                    <span id="close-modal" class="close">&times;</span> <!-- Close button for modal -->
+                    <h2>Confirm Bank Account Number</h2>
+                    <p>Please enter your bank account number to confirm the sale:</p>
+                    <input type="number" id="bank-account-number" placeholder="Bank Account Number" /> <!-- Input for bank account number -->
+                    <button id="confirm-bank-account">Confirm</button> <!-- Button to confirm bank account -->
                 </div>
-
-            <div class="graph-container">
-                <canvas id="stock-graph"></canvas>
-            </div>           
+            </div>
+            
         </div>
-    </div>
 
-    <script src="page.js"></script>
-
-    <div id="contact">
-        <h2>CONTACT US ON</h2>
-        <div class="social-links">
-            <a href="https://facebook.com" target="_blank" class="social-icon">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://twitter.com" target="_blank" class="social-icon">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="https://github.com" target="_blank" class="social-icon">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://linkedin.com" target="_blank" class="social-icon">
-                <i class="fab fa-linkedin-in"></i>
-            </a>
+        <!-- Graph section for stock price simulation -->
+        <div class="graph-container">
+            <h1>STOCK PRICE SIMULATION</h1>
+            <canvas id="stock-graph"></canvas> <!-- Canvas for rendering the stock graph -->
         </div>
-    </div>
 
-    <div id="notification-container" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
+        <!-- Contact information section -->
+        <div id="contact">
+            <h2>CONTACT US ON</h2>
+            <p>abc@gmail.com</p>
+            <p>9876543210</p>
+            <div class="social-links">
+                <!-- Social media links -->
+                <a href="https://facebook.com" target="_blank" class="social-icon">
+                    <i class="fab fa-facebook-f"></i> <!-- Facebook icon -->
+                </a>
+                <a href="https://twitter.com" target="_blank" class="social-icon">
+                    <i class="fab fa-twitter"></i> <!-- Twitter icon -->
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i> <!-- LinkedIn icon -->
+                </a>
+            </div>
+        </div>
 
-    <footer id="footer">
-        <p>2024 Stock Trade Monitor. All rights reserved.</p>
-    </footer>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Your existing JavaScript code...
-
-            // Logout confirmation
-            document.getElementById('logout-button').addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the default link behavior
-                const confirmed = confirm("Are you sure you want to logout?");
-                if (confirmed) {
-                    window.location.href = "/login/login.html"; // Redirect to logout page
-                }
+        <!-- Popup notification for market closure -->
+        <div id="popup-notification" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; border:1px solid black; padding:20px; z-index:1000;">
+            <h3>Market Closed!</h3>
+            <p>Your stock monitoring has finished.</p>
+            <button id="close-popup">Close</button> <!-- Button to close the popup -->
+        </div>
+        
+        <audio id="completion-sound" src="high-sound.mp3" preload="auto"></audio> <!-- Audio for completion sound -->
+        
+        <footer id="footer">
+            <p>2024 Smart Stock. All rights reserved.</p> <!-- Footer content -->
+        </footer>
+        
+        <script src="page.js"></script> <!-- Link to external JavaScript file -->
+        
+        <script>
+            // Wait for the DOM to be fully loaded before executing the script
+            document.addEventListener('DOMContentLoaded', function() {
+                // Logout confirmation
+                document.getElementById('logout-button').addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default link behavior
+                    const confirmed = confirm("Are you sure you want to logout?"); // Confirm logout action
+                    if (confirmed) {
+                        window.location.href = "/login/login.html"; // Redirect to login page
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
 </body>
 </html>

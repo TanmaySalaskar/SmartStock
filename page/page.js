@@ -1,108 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let stockChart;
-    let intervalId;
+    let stocks = []; // Store multiple stocks
+    let stockChart; // Main chart instance
+    let intervalIds = []; // Store interval IDs for each stock
+    let overallIntervalId; // Interval ID for overall simulation control
+    let transactions = []; // Array to track all transactions
 
     const predefinedStocks = [
-        { name: 'Reliance', price: 2950, open: 2800, high: 3100, low: 2795, close: 2900 },
-        { name: 'TATA', price: 4220, open: 4150, high: 4380, low: 4100, close: 4218 },
-        { name: 'HDFC Bank', price: 1650, open: 1500, high: 1700, low: 1600, close: 1630 },
-        { name: 'Infosys', price: 1770, open: 1650, high: 1800, low: 1600, close: 1700 },
-        { name: 'ICICI Bank', price: 1170, open: 1000, high: 1200, low: 1100, close: 1152 },
-        { name: 'LIC', price: 1133, open: 998, high: 1150, low: 1100, close: 1128 },
-        { name: 'Sun Pharma', price: 1735, open: 1688, high: 1800, low: 1700, close: 1721 },
-        { name: 'JSW', price: 900, open: 852, high: 950, low: 850, close: 888 },
-        { name: 'Adani', price: 3200, open: 3001, high: 3300, low: 3100, close: 3164 },
-        { name: 'Wipro', price: 500, open: 421, high: 520, low: 480, close: 493 }
+        { name: 'Reliance', price: 2950, yesterday: { high: 3200, low: 2800, open: 2910, close: 2945 } },
+        { name: 'TATA', price: 4220, yesterday: { high: 4400, low: 4100, open: 4150, close: 4205 } },
+        { name: 'HDFC Bank', price: 1650, yesterday: { high: 1850, low: 1600, open: 1610, close: 1635 } },
+        { name: 'Infosys', price: 1770, yesterday: { high: 1850, low: 1710, open: 1720, close: 1730 } },
+        { name: 'ICICI Bank', price: 1170, yesterday: { high: 1300, low: 1050, open: 1140, close: 1165 } },
+        { name: 'LIC', price: 1133, yesterday: { high: 1250, low: 1000, open: 1120, close: 1050 } },
+        { name: 'Sun Pharma', price: 1735, yesterday: { high: 1750, low: 1700, open: 1720, close: 1735 } },
+        { name: 'JSW', price: 900, yesterday: { high: 920, low: 880, open: 885, close: 895 } },
+        { name: 'Adani', price: 3200, yesterday: { high: 3250, low: 3100, open: 3150, close: 3180 } },
+        { name: 'Wipro', price: 500, yesterday: { high: 530, low: 490, open: 480, close: 495 } }
     ];
 
     const stockList = document.getElementById('stock-list');
+    const boughtStocksList = document.getElementById('bought-stocks-list');
+    const simulationStatusMessage = document.getElementById('simulation-status-message');
+
+    // Populate the predefined stock list
     predefinedStocks.forEach(stock => {
         const listItem = document.createElement('li');
         listItem.textContent = `${stock.name}: ₹${stock.price.toFixed(2)}`;
-        listItem.dataset.price = stock.price;
-        listItem.dataset.open = stock.open;
-        listItem.dataset.high = stock.high;
-        listItem.dataset.low = stock.low;
-        listItem.dataset.close = stock.close;
+
+        listItem.addEventListener('mouseover', function(event) {
+            const dropdown = document.getElementById('stock-dropdown');
+            dropdown.style.left = '350px';
+            dropdown.style.top = `${event.pageY}px`;
+            dropdown.style.display = 'block';
+
+            dropdown.innerHTML = `
+                <strong>Yesterday's</strong><br>
+                High: ₹${stock.yesterday.high}<br>
+                Low: ₹${stock.yesterday.low}<br>
+                Open: ₹${stock.yesterday.open}<br>
+                Close: ₹${stock.yesterday.close}
+            `;
+        });
+
+        listItem.addEventListener('mouseout', function() {
+            document.getElementById('stock-dropdown').style.display = 'none';
+        });
+
         stockList.appendChild(listItem);
-
-        listItem.addEventListener('mouseover', function() {
-            if (!listItem.querySelector('.dropdown')) {
-                let dropdown = document.createElement('div');
-                dropdown.className = 'dropdown';
-                dropdown.style.position = 'absolute';
-                dropdown.style.backgroundColor = 'white';
-                dropdown.style.border = '1px solid';
-                dropdown.style.padding = '5px';
-                dropdown.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
-                dropdown.innerHTML = `
-                    <h3>YESTERDAY'S</h3>
-                    <p>Open: ₹${listItem.dataset.open}</p>
-                    <p>High: ₹${listItem.dataset.high}</p>
-                    <p>Low: ₹${listItem.dataset.low}</p>
-                    <p>Close: ₹${listItem.dataset.close}</p>
-                `;
-                listItem.appendChild(dropdown);
-            }
-        });
-
-        listItem.addEventListener('mouseleave', function() {
-            const dropdown = listItem.querySelector('.dropdown');
-            if (dropdown) {
-                dropdown.remove();
-            }
-        });
     });
 
-    document.getElementById('submit-button').addEventListener('click', function() {
-        const stockName = document.getElementById('stock-name').value;
-        const selectedStock = predefinedStocks.find(stock => stock.name.toLowerCase() === stockName.toLowerCase());
-
-        if (!selectedStock) {
-            alert('Please select a valid stock from the list.');
-            return;
-        }
-
-        const lowLimit = parseFloat(document.getElementById('low-limit').value);
-        const highLimit = parseFloat(document.getElementById('high-limit').value);
-
-        if (isNaN(lowLimit) || isNaN(highLimit)) {
-            alert('Please enter valid numeric values for limits.');
-            return;
-        }
-
-        let stock = {
-            id: 1,
-            purchasePrice: selectedStock.price,
-            currentPrice: selectedStock.price, // Start at the current buy price
-            boughtTime: Date.now()
-        };
-
-        const statusLabel = document.getElementById('status-label');
+    function initChart() {
         const ctx = document.getElementById('stock-graph').getContext('2d');
-
-        if (stockChart) {
-            stockChart.destroy();
-        }
-
         stockChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: [],
-                datasets: [{
-                    label: `${selectedStock.name} Price`,
-                    data: [],
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    fill: false
-                }]
+                datasets: []
             },
             options: {
                 scales: {
                     x: {
                         type: 'time',
                         time: {
-                            unit: 'second'
+                            unit: 'second',
+                            tooltipFormat: 'll HH:mm:ss',
+                            displayFormats: {
+                                second: 'HH:mm:ss'
+                            }
                         },
                         title: {
                             display: true,
@@ -118,129 +82,395 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+        
+        // Load held stocks from localStorage
+        loadHeldStocks();
+    }
 
-        function updateStatus(stock) {
-            let message = `${selectedStock.name} `;
-            let action = '';
-            let profitOrLoss = 0;
+    function loadHeldStocks() {
+        const heldStocks = JSON.parse(localStorage.getItem('heldStocks')) || [];
+        
+        heldStocks.forEach(stock => {
+            // Reconstruct the stock object with necessary properties
+            const reconstructedStock = {
+                name: stock.name,
+                purchasePrice: stock.purchasePrice,
+                currentPrice: stock.currentPrice,
+                lowLimit: stock.lowLimit,
+                highLimit: stock.highLimit,
+                boughtTime: stock.boughtTime,
+                quantity: stock.quantity,
+                chartIndex: stocks.length,
+            };
 
-            if (stock.currentPrice <= lowLimit) {
-                profitOrLoss = stock.purchasePrice - stock.currentPrice;
-                message += `Selling at ₹${stock.currentPrice.toFixed(2)}. Loss: ₹${profitOrLoss.toFixed(2)}`;
-                action = 'Sold';
-            } else if (stock.currentPrice >= highLimit + 1) {
-                profitOrLoss = stock.currentPrice - stock.purchasePrice;
-                message += `Selling at ₹${stock.currentPrice.toFixed(2)}. Profit: ₹${profitOrLoss.toFixed(2)}`;
-                action = 'Sold';
-            } else {
-                message += `No Sale. Holding at ₹${stock.currentPrice.toFixed(2)}`;
-                action = 'Held';
-            }
-
-            return { message, action };
-        }
-
-        function saveTransaction(stockName, action, buyingPrice, sellingPrice, quantity, dateTime) {
-            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-            transactions.push({ stockName, action, buyingPrice, sellingPrice, quantity, dateTime });
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-        }
-
-        function showNotification(message, soundType) {
-            const container = document.getElementById('notification-container');
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.style.backgroundColor = 'white';
-            notification.style.color = 'black';
-            notification.style.padding = '10px';
-            notification.style.marginBottom = '5px';
-            notification.style.borderRadius = '5px';
-            notification.style.boxShadow = '0px 0px 5px rgba(0,0,0,0.5)';
-            notification.style.position = 'relative';
-            notification.style.animation = 'popin 0.5s ease-out';
-            notification.textContent = message;
-            container.appendChild(notification);
-
-            const audio = document.getElementById(`notification-sound-${soundType}`);
-            if (audio) {
-                audio.play().catch(error => {
-                    console.warn(`Error playing sound ${soundType}: ${error}`);
-                });
-            }
-
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        function simulateContinuousPriceChanges() {
-            const startTime = Date.now();
-            const simulationDuration = 50000; // 50 seconds
-
-            // Initialize currentPrice to purchasePrice for fluctuations
-            stock.currentPrice = stock.purchasePrice;
-
-            intervalId = setInterval(() => {
-                const currentTime = Date.now();
-
-                if (currentTime - startTime >= simulationDuration) {
-                    clearInterval(intervalId);
-                    const { message, action } = updateStatus(stock);
-                    statusLabel.textContent = message;
-
-                    if (action === 'Sold') {
-                        saveTransaction(selectedStock.name, action, stock.purchasePrice, stock.currentPrice, 1, new Date().toLocaleString());
-                    }
-
-                    stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
-                    stockChart.data.datasets[0].data.push(stock.currentPrice);
-                    stockChart.update();
-                } else {
-                    // Calculate fluctuation relative to the current price
-                    const fluctuation = (Math.random() - 0.5) * 300;
-                    stock.currentPrice += fluctuation; // Adjust currentPrice directly
-
-                    // Ensure price doesn't go below 0
-                    if (stock.currentPrice < 0) {
-                        stock.currentPrice = 0;
-                    }
-
-                    if (stock.currentPrice > highLimit) {
-                        showNotification("Price went high", "high");
-                    }
-
-                    if (stock.currentPrice < stock.purchasePrice) {
-                        showNotification("Price getting low", "low");
-                    }
-
-                    const { message } = updateStatus(stock);
-                    statusLabel.textContent = message;
-
-                    stockChart.data.labels.push(luxon.DateTime.now().toJSDate());
-                    stockChart.data.datasets[0].data.push(stock.currentPrice);
-                    stockChart.update();
-                }
-            }, 5000); // Update every 5 seconds
-        }
-
-        simulateContinuousPriceChanges();
-
-        // Manual sell functionality
-        document.getElementById('sell-button').addEventListener('click', function() {
-            const currentPrice = stock.currentPrice; // Get the current price from the stock object
-            const { message, action } = updateStatus(stock);
-
-            statusLabel.textContent = message; // Update the status label
-
-            // Save transaction on manual sell
-            saveTransaction(selectedStock.name, action, stock.purchasePrice, currentPrice, 1, new Date().toLocaleString());
-            
-            // Clear the chart and reset the stock variables
-            stockChart.data.labels = [];
-            stockChart.data.datasets[0].data = [];
-            stockChart.update();
-            clearInterval(intervalId); // Stop the simulation
-            alert("Stock sold successfully!");
+            stocks.push(reconstructedStock);
+            addBoughtStockItem(reconstructedStock);
+            addStockDataset(reconstructedStock);
+            startSimulation(reconstructedStock); // Start simulation for held stocks
         });
+    }
+
+    document.getElementById('submit-button').addEventListener('click', function() {
+        const stockName = document.getElementById('stock-name').value;
+        const selectedStock = predefinedStocks.find(stock => stock.name.toLowerCase() === stockName.toLowerCase());
+
+        if (!selectedStock) {
+            toastr.options = {
+            closeButton: true,
+            newestOnTop: true,
+            positionClass: "toast-top-center",
+            preventDuplicates: true,
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+            tapToDismiss: true,
+            };            
+            toastr.warning("Please select a valid stock from the list.");
+            return;
+        }
+
+        const lowLimit = parseFloat(document.getElementById('low-limit').value);
+        const highLimit = parseFloat(document.getElementById('high-limit').value);
+        const volume = parseInt(document.getElementById('volume').value) || 1;
+
+        if (isNaN(lowLimit) || isNaN(highLimit) || volume <= 0) {
+            toastr.options = {
+                closeButton: true,
+                newestOnTop: true,
+                positionClass: "toast-top-center",
+                preventDuplicates: true,
+                timeOut: 6000,
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: true,
+                };
+            toastr.warning("Please enter valid numeric values for limits and quantity.");
+            return;
+        }
+
+        // Prepare confirmation message
+        const totalCost = selectedStock.price * volume;
+        const confirmationMessage = `Are you sure you want to buy ${volume} shares of ${selectedStock.name} at ₹${selectedStock.price.toFixed(2)} each?\nTotal: ₹${totalCost.toFixed(2)}`;
+
+        // Show the payment confirmation modal
+        document.getElementById('confirmation-message').textContent = confirmationMessage;
+        document.getElementById('payment-confirmation-modal').style.display = 'block';
+
+        // Handle confirmation
+        document.getElementById('confirm-payment-button').onclick = function() {
+            const stock = {
+                name: selectedStock.name,
+                purchasePrice: selectedStock.price,
+                currentPrice: selectedStock.price,
+                lowLimit: lowLimit,
+                highLimit: highLimit,
+                boughtTime: Date.now(),
+                quantity: volume,
+                chartIndex: stocks.length,
+            };
+
+            stocks.push(stock);
+            console.log("Stock added:", stock); // Log added stock
+            addBoughtStockItem(stock);
+            addStockDataset(stock);
+            startSimulation(stock);
+
+             // Store the transaction in localStorage
+    transactions.push({
+        type: 'Buy',
+        stockName: stock.name,
+        price: stock.purchasePrice,
+        quantity: stock.quantity,
+        profitLoss: 0, // No profit/loss at the time of purchase,
+        date: stock.boughtTime
     });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+
+            // Close the modal after confirming
+            document.getElementById('payment-confirmation-modal').style.display = 'none';
+        };
+
+        // Handle cancellation
+        document.getElementById('cancel-payment-button').onclick = function() {
+            document.getElementById('payment-confirmation-modal').style.display = 'none';
+        };
+    });
+
+    function addBoughtStockItem(stock) {
+        const listItem = document.createElement('li');
+        const total = stock.currentPrice * stock.quantity;
+
+        listItem.textContent = `${stock.name} - ₹${stock.currentPrice.toFixed(2)} (Volume: ${stock.quantity}) = ₹${total.toFixed(2)}`;
+        listItem.style.color = stock.currentPrice > stock.purchasePrice ? 'green' : 'red'; // Set initial color
+
+        boughtStocksList.appendChild(listItem); // Append list item to the bought stocks list
+        stock.listItem = listItem; // Store reference for updating
+
+        console.log("Stock added:", stock.name);
+    }
+
+
+    function addStockDataset(stock) {
+        stockChart.data.datasets.push({
+            label: stock.name,
+            data: [],
+            borderColor: randomColor(),
+            borderWidth: 3,
+            fill: false,
+            tension: 0.2 // Adjust tension for smoothness (0 = straight line, 1 = very smooth)
+        });
+        stockChart.update();
+    }
+
+    function randomColor() {
+        return `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`;
+    }
+
+    function startSimulation(stock) {
+        if (!overallIntervalId) {
+            overallIntervalId = setTimeout(() => {
+                clearAllSimulations();
+                showOverallCompletionNotification();
+            }, 50000); // Change this to 50000 for 50 seconds
+        }
+
+        const intervalId = setInterval(() => {
+            simulatePriceChange(stock);
+        }, 5000);
+        
+        intervalIds.push(intervalId);
+        simulatePriceChange(stock);
+    }
+
+    function clearAllSimulations() {
+        intervalIds.forEach(intervalId => clearInterval(intervalId)); // Clear all individual stock intervals
+        intervalIds = []; // Reset the array
+        if (overallIntervalId) {
+            clearTimeout(overallIntervalId); // Clear the overall timeout
+            overallIntervalId = null; // Reset the variable
+        }
+    }
+
+    function simulatePriceChange(stock) {
+        const fluctuation = (Math.random() - 0.5) * 50; // Random price fluctuation
+        const previousPrice = stock.currentPrice;
+
+        stock.currentPrice = Math.max(0, stock.currentPrice + fluctuation); // Update price
+
+        // Update chart data
+    const labelTime = luxon.DateTime.now().toJSDate();
+    stockChart.data.labels.push(labelTime);
+    stockChart.data.datasets[stock.chartIndex].data.push(stock.currentPrice);
+    stockChart.update(); // Update the chart after adding new data
+
+        // Update the bought stocks list with the new price
+        if (stock.listItem) {
+            const total = stock.currentPrice * stock.quantity;
+            stock.listItem.textContent = `${stock.name} - ₹${stock.currentPrice.toFixed(2)} (Volume: ${stock.quantity}) = ₹${total.toFixed(2)}, LowLimit: ${stock.lowLimit}, HighLimit: ${stock.highLimit}`;
+
+            // Change color based on current price
+            stock.listItem.style.color = stock.currentPrice > stock.purchasePrice ? 'green' : 'red';
+
+            // Create sell button if not already created
+            if (!stock.listItem.querySelector('.sell-button')) {
+                createSellButton(stock);
+            }
+        }
+
+        checkSellConditions(stock); // Check for sell conditions
+        updateSimulationStatus(); // Update simulation status
+    }
+
+    function createSellButton(stock) {
+        const sellButton = document.createElement('button');
+        sellButton.textContent = 'Sell';
+        sellButton.classList.add('sell-button');
+
+        // Show the confirmation modal when sell button is clicked
+        sellButton.addEventListener('click', function() {
+            document.getElementById('bank-confirmation-modal').style.display = 'block';
+            const confirmButton = document.getElementById('confirm-bank-account');
+
+            // Handle bank account confirmation
+            confirmButton.onclick = function() {
+                const accountNumber = document.getElementById('bank-account-number').value;
+
+                if (accountNumber) {
+                    // Proceed with selling
+                    const confirmationMessage = `Are you sure you want to sell ${stock.quantity} shares of ${stock.name} at ₹${stock.currentPrice.toFixed(2)} each?`;
+                    if (confirm(confirmationMessage)) {
+                        const profitLoss = (stock.currentPrice - stock.purchasePrice) * stock.quantity;
+                        toastr.options = {
+                            closeButton: true,
+                            newestOnTop: true,
+                            positionClass: "toast-top-center",
+                            timeOut: 10000,
+                            preventDuplicates: true,
+                            showEasing: "swing",
+                            hideEasing: "linear",
+                            showMethod: "fadeIn",
+                            hideMethod: "fadeOut",
+                            tapToDismiss: true,
+                            };
+                        toastr.success(`Sold ${stock.quantity} shares of ${stock.name}. Profit/Loss: ₹${profitLoss.toFixed(2)}`);
+
+    // Log the transaction
+    transactions.push({
+        type: 'Sell',
+        stockName: stock.name,
+        price: stock.currentPrice,
+        quantity: stock.quantity,
+        profitLoss: profitLoss, // Store calculated profit/loss
+        date: Date.now()
+    });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+
+
+                        // Remove the stock from the bought stocks list
+                        stocks = stocks.filter(s => s !== stock); // Remove from stocks array
+                        clearInterval(intervalIds[stock.chartIndex]); // Stop the simulation for this stock
+                        intervalIds.splice(stock.chartIndex, 1); // Remove the interval ID
+                        stock.listItem.remove(); // Remove from display
+
+                        // Remove from chart dataset
+                        stockChart.data.datasets.splice(stock.chartIndex, 1);
+                        stockChart.update();
+                        updateSimulationStatus(); // Update simulation status
+                    }
+                    // Close the modal
+                    document.getElementById('bank-confirmation-modal').style.display = 'none';
+                } else {
+                    toastr.options = {
+                        closeButton: true,
+                        newestOnTop: true,
+                        positionClass: "toast-top-center",
+                        preventDuplicates: true,
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: true,
+                        };
+                    toastr.warning('Please enter a valid bank account number.');
+                }
+            };
+
+            // Close modal on clicking the close button
+            document.getElementById('close-modal').onclick = function() {
+                document.getElementById('bank-confirmation-modal').style.display = 'none';
+            };
+
+        })
+        stock.listItem.appendChild(sellButton); // Append the sell button to the list item
+    
+    }
+
+   
+    function updateSimulationStatus() {
+        simulationStatusMessage.textContent = `Current Status: Running... (Total Stocks: ${stocks.length})`;
+    }
+
+    let lowLimitSound = new Audio('low-sound.mp3');
+let highLimitSound = new Audio('high-sound.mp3');
+
+function checkSellConditions(stock) {
+    if (stock.currentPrice <= stock.purchasePrice) {
+        // Ensure sound is played in response to user action
+        playSound(lowLimitSound);
+    }
+    if (stock.currentPrice >= stock.purchasePrice) {
+        // Ensure sound is played in response to user action
+        playSound(highLimitSound);
+    }
+}
+
+function playSound(sound) {
+    // Play sound only if user has interacted with the document
+    sound.play().catch(error => {
+        console.error('Failed to play sound:', error);
+    });
+}
+
+
+    function showOverallCompletionNotification() {
+        const heldStocks = []; // Array to track held stocks
+        stocks.forEach(stock => {
+            // Alert the current stock price
+            toastr.options = {
+                closeButton: true,
+                newestOnTop: true,
+                positionClass: "toast-top-center",
+                timeOut: 10000,
+                preventDuplicates: true,
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: true,
+                };
+            toastr.info(`${stock.name} is being held. Current price: ₹${stock.currentPrice.toFixed(2)}`);
+
+            // Check if current price is above the high limit
+            if (stock.currentPrice > stock.highLimit) {
+                const profitLoss = (stock.currentPrice - stock.purchasePrice) * stock.quantity;
+                toastr.options = {
+                    closeButton: true,
+                    newestOnTop: true,
+                    positionClass: "toast-top-center",
+                    timeOut: 10000,
+                    preventDuplicates: true,
+                    showEasing: "swing",
+                    hideEasing: "linear",
+                    showMethod: "fadeIn",
+                    hideMethod: "fadeOut",
+                    tapToDismiss: true,
+                    };
+                toastr.success(`Selling ${stock.quantity} shares of ${stock.name} at ₹${stock.currentPrice.toFixed(2)} each due to high limit exceeded. Profit/Loss: ₹${profitLoss.toFixed(2)}`);
+
+                // Log the transaction
+    transactions.push({
+        type: 'Sell',
+        stockName: stock.name,
+        price: stock.currentPrice,
+        quantity: stock.quantity,
+        profitLoss: profitLoss, // Store calculated profit/loss
+        date: Date.now()
+    });
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+
+                // Remove the stock from the bought stocks list
+                stocks = stocks.filter(s => s !== stock); // Remove from stocks array
+                clearInterval(intervalIds[stock.chartIndex]); // Stop the simulation for this stock
+                intervalIds.splice(stock.chartIndex, 1); // Remove the interval ID
+                stock.listItem.remove(); // Remove from display
+                
+                // Remove from chart dataset
+                stockChart.data.datasets.splice(stock.chartIndex, 1);
+                stockChart.update();
+            } else {
+                heldStocks.push(stock); // Track held stocks if not sold
+            }
+
+            
+        });
+
+        // Store held stocks and transactions in localStorage
+        localStorage.setItem('heldStocks', JSON.stringify(heldStocks));
+        localStorage.setItem('transactions', JSON.stringify(transactions)); // Save transactions
+        
+        const popup = document.getElementById('popup-notification');
+        popup.style.display = 'block';
+        finishSound = new Audio("finish.mp3");
+        finishSound.play();
+        popup.querySelector('p').textContent = 'All stock simulations completed!';
+    }
+
+    document.getElementById('close-popup').addEventListener('click', function() {
+        document.getElementById('popup-notification').style.display = 'none';
+    });
+
+    initChart();
 });
