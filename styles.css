@@ -6,10 +6,8 @@ html, body {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background: linear-gradient(120deg, #00c8ff, #84ffa1); /* Gradient from light blue to pink */
+    background: linear-gradient(120deg, #00c8ff, #84ffa1); /* Gradient from light blue to green */
 }
-
-
 
 .container {
     display: flex;
@@ -21,33 +19,39 @@ html, body {
     box-sizing: border-box;
 }
 
+  /* Custom styles for Toastr notifications */
+  .toast {
+    opacity: 1; /* Adjust this value for darker/lighter opacity */
+    background-color: rgba(0, 0, 0, 0.8); /* Darker background */
+    color: white; /* Text color */
+}
+
 /* Navbar Styles */
 .navbar {
-    width: 100%; /* Ensure the navbar spans the full width of the screen */
+    width: 100%;
     background-color: black;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: center;
-    z-index: 1000; /* Make sure it stays above other content */
+    z-index: 1000;
+    padding: 10px; /* Added padding for better spacing */
     box-sizing: border-box;
 }
 
 .navbar img {
     width: 100px;
-    margin-left: 2px;
 }
 
-.navbar .logo-name a{
+.navbar .logo-name a {
     font-size: 1.6em;
     color: #ffea05;
     text-decoration: none;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
     margin-left: 0.5cm;
-
 }
 
 .nav-links {
-    margin-left: auto; /* Push the nav links to the right */
+    margin-left: auto;
     list-style: none;
     display: flex;
     gap: 20px;
@@ -63,7 +67,7 @@ html, body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.navbar .nav-links li a:hover {
+.nav-links li a:hover {
     background-color: #ffe96d;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     color: black;
@@ -75,25 +79,26 @@ html, body {
     margin: 1cm;
     padding: 40px;
     width: 95%;
-    background-color: #ffffff; /* White content background */
+    background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 10px; /* Rounded edges for content wrapper */
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
+/* Stock List Styles */
 .stock-list {
     width: 30%;
     padding: 15px;
-    border-right: 2px solid #212121; /* Black border */
+    border-right: 2px solid #212121;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative; /* Needed for positioning the dropdown */
+    position: relative;
     box-sizing: border-box;
 }
 
 .stock-list h2 {
     margin-top: 0;
     font-size: 1.5em;
-    color: #212121; /* Black text */
+    color: #212121;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -105,37 +110,24 @@ html, body {
 
 .stock-list ul li {
     padding: 10px;
-    border-bottom: 1px solid #212121; /* Black border */
+    border-bottom: 1px solid #212121;
     transition: background-color 0.3s;
-    position: relative; /* Needed for positioning the dropdown */
+    position: relative;
+    cursor: pointer; /* Change cursor to pointer */
 }
 
 .stock-list ul li:hover {
-    background-color: #eaeaea; /* Light grey hover */
+    background-color: #eaeaea;
 }
 
-.stock-list ul li .dropdown {
+/* Dropdown Styles */
+.dropdown {
     display: none;
     position: absolute;
-    left: 100%; /* Adjust as needed */
-    top: 0;
-    background-color: #f8f8f8; /* Light grey background */
-    border: 0.5px solid #b0b0b0; /* Light grey border */
-    border-radius: 4px;
+    background-color: white;
+    border: 1px solid #ccc;
     padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 150px; /* Adjust width as needed */
-    font-size: 0.9em; /* Adjust font size if needed */
-}
-
-.stock-list ul li:hover .dropdown {
-    display: block;
-}
-
-.stock-list ul li .dropdown p {
-    margin: 0;
-    padding: 5px 0;
-    color: #212121; /* Dark text color */
+    z-index: 1000;
 }
 
 /* Input Section Styles */
@@ -152,22 +144,22 @@ html, body {
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    color: #212121; /* Black text */
+    color: #212121;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .input-group input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #212121; /* Black border */
+    border: 1px solid #212121;
     border-radius: 4px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
 }
 
 #submit-button {
-    background-color: #212121; /* Black button */
-    color: #fffde7; /* Light yellow text */
+    background-color: #212121;
+    color: #fffde7;
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -178,87 +170,196 @@ html, body {
 }
 
 #submit-button:hover {
-    background-color: #424242; /* Darker black hover */
+    background-color: #424242;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Sell Button Styles */
-#sell-button {
-    background-color: #ff3d3d; /* Red color for sell */
-    color: #fff; /* White text */
+/* Modal Styles */
+#payment-confirmation-modal {
+    width: 350px;
+    background-color: #f9f9f9; /* Light gray background */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+#payment-confirmation-modal h2 {
+    margin: 0 0 15px;
+    font-size: 2em; /* Larger heading */
+    color: #2c3e50; /* Darker blue-gray color */
+    text-align: center;
+}
+
+#payment-confirmation-modal p {
+    margin: 0 0 20px;
+    font-size: 1.5em; /* Increased paragraph size */
+    color: #34495e; /* Grayish-blue color */
+    text-align: center;
+}
+
+#payment-confirmation-modal button {
+    width: 48%;
+    padding: 12px;
     border: none;
-    padding: 10px 20px;
-    margin-top: 20px;
-    border-radius: 4px;
-    font-size: 16px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-#sell-button:hover {
-    background-color: #ff1a1a; /* Darker red on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+#payment-confirmation-modal button:hover {
+    transform: scale(1.05);
 }
 
-#sell-button:focus {
-    outline: none; /* Remove outline on focus */
+#confirm-payment-button {
+    background-color: #27ae60; /* Emerald green */
+    color: white;
+}
+
+#cancel-payment-button {
+    background-color: #e74c3c; /* Bright red */
+    color: white;
 }
 
 
+
+/* Status Label Styles */
 .status-label {
     margin-top: 20px;
     font-size: 1.2em;
-    color: #212121; /* Black text */
+    color: #212121;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-/* Graph Container Styles */
-.graph-container {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 800px;
-    background-color: #ffffff; /* White background */
+/* Bought Stocks List Styles */
+.bought-stocks-list {
+    width: 70%; /* Adjust width as needed */
     padding: 15px;
-    border: 1px solid #212121; /* Black border */
-    border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
+    background-color: #f5f5f5; /* Light gray background */
+    border-radius: 8px;
+    margin-left: 20px; /* Space from other sections */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    max-height: 400px; /* Limit height for scrolling */
 }
+
+.bought-stocks-list h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #212121;
+    text-align: center; /* Center the heading */
+}
+
+.bought-stocks-list ul li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.bought-stocks-list ul li{
+    padding: 10px;
+    border-bottom: 1px solid #cccccc; /* Light border for separation */
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer; /* Pointer cursor for clickable items */
+}
+
+.bought-stocks-list ul li :hover {
+    background-color: #eaeaea; /* Highlight on hover */
+}
+
+/* Stock Item Price Styles */
+.bought-stocks-list ul li .stock-price {
+    font-weight: bold;
+    color: #007bff; /* Blue color for current price */
+}
+
+/* Total Value Styles */
+.bought-stocks-list ul li .total-value {
+    color: #28a745; /* Green for total value */
+}
+
+.sell-button {
+    background-color: #ff4c4c; /* Red background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 5px 10px; /* Some padding */
+    margin-left: 20px;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.sell-button:hover {
+    background-color: #e63939; /* Darker red on hover */
+}
+
+#bank-confirmation-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+
+
+.graph-container{
+    width: 60%;
+}
+
+#stock-graph{
+    background-color: rgb(255, 255, 255);
+    
+}
+
 
 /* Contact Section Styles */
 #contact {
     display: flex;
     flex-direction: column;
-    text-align: center; /* Center align the content */
+    text-align: center;
     padding: 20px;
-    background-color: #000000; /* Black background */
+    background-color: #000000;
     color: white;
     width: 100%;
     box-sizing: border-box;
 }
 
 #contact h2 {
-    margin-bottom: 20px; /* Space below the heading */
-    font-size: 18px; /* Adjust font size for heading */
+    margin-bottom: 20px;
+    font-size: 18px;
 }
 
 .social-links {
     display: flex;
-    justify-content: center; /* Center align the icons horizontally */
-    gap: 50px; /* Space between icons */
+    justify-content: center;
+    gap: 50px;
 }
 
 .social-icon {
-    text-decoration: none; /* Remove underline */
-    color: #ffffff; /* Icon color */
-    font-size: 20px; /* Icon size */
-    transition: color 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 20px;
+    transition: color 0.3s, transform 0.3s;
 }
 
 .social-icon:hover {
-    color: #007bff; /* Change color on hover */
-    transform: scale(1.5); /* Slightly enlarge on hover */
+    color: #007bff;
+    transform: scale(1.5);
 }
 
 /* Footer Styles */
@@ -272,192 +373,102 @@ footer {
     font-size: 15px;
     box-sizing: border-box;
     padding: 10px;
-    position: relative; /* Ensure footer is positioned properly */
 }
 
-/* Dashboard Styles */
-.dashboard {
-    width: 95%;
-    background: #ffffff; /* White dashboard background */
-    padding: 20px;
-    margin: 1cm;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
+
+/* Transaction page Styles */
+
+.dashboard{
+    width: 90%;
+    background-color: rgb(249, 255, 216);
+    border-radius: 0.5%;
+    padding: 10px;
 }
 
-.dashboard h2 {
-    margin-top: 0;
-    color: #000000; /* Black text */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);    
-}
 
 #trade-table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-collapse: collapse; /* Remove gaps between cells */
+    margin-top: 20px; /* Space above the table */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 8px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure rounded corners are visible */
 }
 
-#trade-table th,
+#trade-table th, 
 #trade-table td {
-    border: 1px solid #212121; /* Black border */
-    padding: 8px;
-    text-align: left;
+    padding: 15px 20px; /* Increased padding for cells */
+    text-align: left; /* Align text to the left */
+    border-bottom: 1px solid #e0e0e0; /* Light border for separation */
 }
 
 #trade-table th {
-    background-color: #fffde7; /* Light yellow background for table header */
+    background-color: #007bff; /* Primary color for headers */
+    color: #ffffff; /* White text color */
+    font-weight: bold; /* Bold text for headers */
+    text-transform: uppercase; /* Uppercase for headers */
 }
 
 #trade-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Light gray for even rows */
 }
 
 #trade-table tr:hover {
-    background-color: #f0f0f0; /* Light grey hover */
+    background-color: #ffd900; /* Light blue highlight on hover */
 }
 
-#clear-history-button{
-    background-color: red; /* Black button */
-    color: #fffde7; /* Light yellow text */
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, box-shadow 0.3s;
-
+#trade-table td {
+    color: #333; /* Darker text color for better contrast */
 }
 
+/* Button Styles for Clear History and Download Excel */
+#clear-history-button
+{
+    padding: 12px 18px; /* Adjusted padding */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    color: #fff; /* White text */
+    background-color: red; /* Bootstrap success color */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1em; /* Standard font size */
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s; /* Transition effects */
+    margin-right: 10px; /* Space between buttons */
+}
 #download-excel-button {
-    background-color: green; /* Black button */
-    color: #fffde7; /* Light yellow text */
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s, box-shadow 0.3s;
+    padding: 12px 18px; /* Adjusted padding */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    color: #fff; /* White text */
+    background-color: #28a745; /* Bootstrap success color */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 1em; /* Standard font size */
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s; /* Transition effects */
+    margin-right: 10px; /* Space between buttons */
 }
 
 #clear-history-button:hover{
-    background-color: #ff5b5b; /* Darker black hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-
+    background-color: #a70000; /* Darker shade on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+    transform: translateY(-2px); /* Slight lift effect */
 }
+
 #download-excel-button:hover {
-    background-color: #31ff8a; /* Darker black hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background-color: #78ff95; /* Darker shade on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+    transform: translateY(-2px); /* Slight lift effect */
 }
 
-#download-excel-button:focus {
-    outline: none;
-}
-
-
-
-/* RESPONSIVE */
-/* General Styles */
-@media (max-width: 1200px) {
-    .container {
-        margin: 0 10px; /* Add some margin on small screens */
-    }
-
-    .navbar {
-        padding: 5px 10px; /* Reduce padding on small screens */
-    }
-
-    .navbar .logo a {
-        font-size: 2em; /* Reduce font size for small screens */
-        margin-right: 3cm; /* Adjust margin */
-    }
-
-    .navbar .nav-links {
-        gap: 10px; /* Reduce gap between links */
-    }
-
-    .stock-list, .input-section {
-        width: 100%; /* Full width for small screens */
-        border-right: none; /* Remove border for small screens */
-        border-bottom: 1px solid #212121; /* Add bottom border for separation */
-    }
-
-    .input-group input {
-        width: calc(100% - 20px); /* Ensure inputs fit properly */
-    }
-
-    .content-wrapper {
-        width: 100%; /* Full width for small screens */
-        margin: 10px 0; /* Adjust margin */
-    }
-
-    #contact {
-        padding: 10px; /* Reduce padding */
-    }
-
-    .social-links {
-        gap: 20px; /* Reduce space between icons */
-    }
-
-    .dashboard {
-        margin: 1cm; /* Reduce margin */
-    }
-
-    #trade-table th, #trade-table td {
-        padding: 6px; /* Reduce padding for small screens */
+/* Responsive Styles */
+@media (max-width: 768px) {
+    #trade-table th, 
+    #trade-table td {
+        padding: 10px 15px; /* Adjusted padding for smaller screens */
+        font-size: 0.9em; /* Smaller font size */
     }
 
     #clear-history-button,
     #download-excel-button {
-        padding: 8px 16px; /* Adjust button size */
-        font-size: 14px; /* Reduce font size */
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar .logo a {
-        font-size: 1.5em; /* Further reduce font size */
-    }
-
-    .navbar .nav-links {
-        flex-direction: column; /* Stack links vertically */
-        gap: 10px;
-    }
-
-    .navbar img {
-        width: 60px; /* Reduce logo size */
-        padding-left: 0.5cm; /* Adjust padding */
-        margin: 0;
-    }
-
-    .stock-list, .input-section {
-        width: 100%; /* Full width */
-        border-right: none; /* Remove border */
-        border-bottom: 1px solid #212121; /* Add bottom border */
-    }
-
-    .content-wrapper {
-        margin: 5px 0; /* Adjust margin */
-    }
-
-    #contact h2 {
-        font-size: 20px; /* Adjust font size */
-    }
-
-    .social-links {
-        gap: 10px; /* Further reduce space between icons */
-    }
-
-    #trade-table th, #trade-table td {
-        padding: 4px; /* Further reduce padding */
-    }
-
-    #clear-history-button,
-    #download-excel-button {
-        padding: 6px 12px; /* Adjust button size */
-        font-size: 12px; /* Further reduce font size */
+        padding: 10px 15px; /* Adjusted padding */
+        font-size: 0.9em; /* Smaller font size */
     }
 }
