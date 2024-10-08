@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Set character encoding and viewport for responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    
+    <!-- Include Chart.js library for charting functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Link to an external stylesheet (if needed) -->
+    <link rel="stylesheet" href="/styles.css">
+    
+    <!-- Internal CSS for styling the page -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Set font family */
+            background-color: #e9ecef; /* Light gray background */
+            margin: 0; /* Remove default margin */
+            padding: 20px; /* Add padding around the body */
+        }
+
+        h1 {
+            text-align: center; /* Center the heading text */
+            color: #4a4a4a; /* Dark gray color for heading */
+            margin-bottom: 20px; /* Space below the heading */
+            font-size: 2.5em; /* Increase font size */
+        }
+
+        .container {
+            max-width: 800px; /* Set maximum width for the container */
+            margin-top: 2%; /* Add top margin */
+            background: white; /* White background for the container */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+            padding: 30px; /* Padding inside the container */
+            transition: transform 0.2s; /* Smooth transition for scaling effect */
+        }
+
+        .container:hover {
+            transform: scale(1.02); /* Scale up the container on hover */
+        }
+
+        canvas {
+            max-width: 100%; /* Responsive width for canvas */
+            height: auto; /* Maintain aspect ratio */
+            margin: 20px 0; /* Vertical space around the canvas */
+            border: 2px solid #007bff; /* Blue border around the canvas */
+            border-radius: 8px; /* Rounded corners for the canvas */
+        }
+
+        footer {
+            text-align: center; /* Center text in the footer */
+            margin-top: 30px; /* Space above the footer */
+            font-size: 1.5em; /* Increase font size for footer */
+            color: white; /* White text color for footer */
+        }
+
+        footer p {
+            margin: 5px 0; /* Space around footer paragraph */
+            line-height: 1.5; /* Improve line spacing */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Link to the previous page with an arrow image -->
+        <a href="/page/page.html"><img src="/arrow.png" alt="Back"></a> 
+        <div class="logo-name">
+            <!-- Logo and name of the application -->
+            <a href="/page/page.html">SMART STOCK</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>YOUR PORTFOLIO</h1> <!-- Main heading for the portfolio -->
+        
+        <!-- Canvas element for rendering the portfolio chart -->
+        <canvas id="portfolio-chart"></canvas>
+        
+        <footer>
+            <p>Data Visualization of Your Stock Holdings</p> <!-- Footer description -->
+        </footer>
+    </div>
+    
+    <!-- Include the JavaScript file for portfolio functionality -->
+    <script src="portfolio.js"></script>
+</body>
+</html>
