@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Specify the character set for the document -->
     <meta charset="UTF-8">
+    <!-- Make the website responsive on different devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Stock Trade Monitor</title>
+    <!-- Title of the webpage displayed on the tab -->
+    <title>Login - Smart Stock</title>
+    <!-- Link to Google Fonts for custom font styling -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Link to the external CSS file for styling the login page -->
     <link rel="stylesheet" href="login.css">
 </head>
-<body background="/bg.png">
+<body background="/bg.png"> <!-- Set a background image for the body -->
     
+<!-- Container for the branding/logo -->
 <div class="stm-container">
-    <img src="/arrow.png" alt="">
-    <h1 id="stm">STM</h1>
+    <img src="/arrow.png" alt=""> <!-- Logo image -->
+    <h1 id="stm">SMST</h1> <!-- Site title -->
 </div>
   
+<!-- Main container for the login form -->
 <div class="login-container">
     <div class="login-box">
-        <h2>LOGIN</h2>
-        <form id="login-form">
+        <h2>LOGIN</h2> <!-- Heading for the login section -->
+        <form id="login-form"> <!-- Form for user login -->
             <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
+                <label for="username">Username</label> <!-- Label for username input -->
+                <input type="text" id="username" placeholder="Enter your username" required> <!-- Username input field -->
             </div>
             <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
+                <label for="password">Password</label> <!-- Label for password input -->
+                <input type="password" id="password" placeholder="Enter your password" required> <!-- Password input field -->
             </div>
-            <button type="submit" id="login-button">Login</button>
-            <div id="error-message" style="display:none;"></div>
+            <button type="submit" id="login-button">Login</button> <!-- Submit button for the form -->
+            <div id="error-message" style="display:none;"></div> <!-- Placeholder for error messages, initially hidden -->
         </form>
         <div class="sign-in-option">
-            <p>Don't have an account? <a href="/signin/signin.html">Sign In</a></p>
+            <p>Don't have an account? <a href="/signin/signin.html">Sign In</a></p> <!-- Link to sign-up page -->
         </div>
     </div>
 </div>
 
+<!-- Link to the external JavaScript file for form functionality -->
 <script src="login.js"></script>
 </body>
 </html>
