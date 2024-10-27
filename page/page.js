@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
             overallIntervalId = setTimeout(() => {
                 clearAllSimulations();
                 showOverallCompletionNotification();
-            }, 50000); // Change this to 50000 for 50 seconds
+            }, 90000); // Change this to 90000 for 90 seconds
         }
 
         const intervalId = setInterval(() => {
